@@ -15,7 +15,7 @@
 
 use std::fs::File;
 use std::io::{BufRead, BufReader};
-use std::sync::Arc;
+use std::sync::{Arc, LazyLock};
 
 use regex::Regex;
 
@@ -31,12 +31,10 @@ pub struct ScriptProvider {
     pub provider: Arc<Provider>,
 }
 
-lazy_static! {
-    static ref PREFERENCES_HEADER_RE: Regex =
-        Regex::new(r"## Fisher: (.*)").unwrap();
-    static ref PROVIDER_HEADER_RE: Regex =
-        Regex::new(r"## Fisher-([a-zA-Z]+): (.*)").unwrap();
-}
+static PREFERENCES_HEADER_RE: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"## Fisher: (.*)").unwrap());
+static PROVIDER_HEADER_RE: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"## Fisher-([a-zA-Z]+): (.*)").unwrap());
 
 #[derive(Debug, Deserialize)]
 struct Preferences {

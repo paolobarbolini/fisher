@@ -19,6 +19,7 @@ use std::net::SocketAddr;
 use std::ops::{Deref, DerefMut};
 use std::path::PathBuf;
 use std::process;
+use std::sync::LazyLock;
 
 use nix::sys::signal::{kill, Signal};
 use nix::unistd::Pid;
@@ -27,9 +28,8 @@ use regex::Regex;
 use crate::common::config::Config;
 use crate::common::prelude::*;
 
-lazy_static! {
-    static ref ADDR_RE: Regex = Regex::new(r"127\.0\.0\.1:[0-9]+").unwrap();
-}
+static ADDR_RE: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"127\.0\.0\.1:[0-9]+").unwrap());
 
 fn binaries_path() -> Result<PathBuf> {
     let mut current = env::current_exe()?;

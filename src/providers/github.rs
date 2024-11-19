@@ -19,41 +19,39 @@ use crate::common::prelude::*;
 use crate::providers::prelude::*;
 use crate::utils;
 
-lazy_static! {
-    static ref GITHUB_EVENTS: Vec<&'static str> = vec![
-        "commit_comment",
-        "create",
-        "delete",
-        "deployment",
-        "deployment_status",
-        "fork",
-        "gollum",
-        "issue_comment",
-        "issues",
-        "label",
-        "member",
-        "membership",
-        "milestone",
-        "organization",
-        "page_build",
-        "project_card",
-        "project_column",
-        "project",
-        "public",
-        "pull_reques_review_comment",
-        "pull_request_review",
-        "pull_request",
-        "push",
-        "repository",
-        "release",
-        "status",
-        "team",
-        "team_add",
-        "watch",
-    ];
-    static ref GITHUB_HEADERS: Vec<&'static str> =
-        vec!["X-GitHub-Event", "X-Hub-Signature", "X-GitHub-Delivery",];
-}
+const GITHUB_EVENTS: &[&'static str] = &[
+    "commit_comment",
+    "create",
+    "delete",
+    "deployment",
+    "deployment_status",
+    "fork",
+    "gollum",
+    "issue_comment",
+    "issues",
+    "label",
+    "member",
+    "membership",
+    "milestone",
+    "organization",
+    "page_build",
+    "project_card",
+    "project_column",
+    "project",
+    "public",
+    "pull_reques_review_comment",
+    "pull_request_review",
+    "pull_request",
+    "push",
+    "repository",
+    "release",
+    "status",
+    "team",
+    "team_add",
+    "watch",
+];
+const GITHUB_HEADERS: &[&'static str] =
+    &["X-GitHub-Event", "X-Hub-Signature", "X-GitHub-Delivery"];
 
 #[derive(Deserialize)]
 struct PushEvent<'src> {

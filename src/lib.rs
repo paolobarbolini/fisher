@@ -18,11 +18,9 @@
 extern crate ansi_term;
 #[macro_use]
 extern crate error_chain;
+extern crate hmac;
 #[cfg(test)]
 extern crate hyper;
-#[macro_use]
-extern crate lazy_static;
-extern crate hmac;
 extern crate nix;
 extern crate rand;
 extern crate regex;

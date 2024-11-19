@@ -16,20 +16,18 @@
 use crate::common::prelude::*;
 use crate::providers::prelude::*;
 
-lazy_static! {
-    static ref GITLAB_EVENTS: Vec<&'static str> = vec![
-        "Push",
-        "Tag Push",
-        "Issue",
-        "Note",
-        "Merge Request",
-        "Wiki Page",
-        "Build",
-        "Pipeline",
-        "Confidential Issue",
-    ];
-    static ref GITLAB_HEADERS: Vec<&'static str> = vec!["X-Gitlab-Event",];
-}
+const GITLAB_EVENTS: &[&'static str] = &[
+    "Push",
+    "Tag Push",
+    "Issue",
+    "Note",
+    "Merge Request",
+    "Wiki Page",
+    "Build",
+    "Pipeline",
+    "Confidential Issue",
+];
+const GITLAB_HEADERS: &[&'static str] = &["X-Gitlab-Event"];
 
 #[derive(Debug, Deserialize)]
 pub struct GitLabProvider {
