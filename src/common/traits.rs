@@ -15,13 +15,12 @@
 
 //! Traits used by Fisher.
 
+use std::fmt::Debug;
 use std::hash::Hash;
 use std::sync::Arc;
-use std::fmt::Debug;
 
 use super::prelude::*;
 use super::structs::HealthDetails;
-
 
 /// This trait represents a script that can be run by Fisher.
 pub trait ScriptTrait {
@@ -36,7 +35,6 @@ pub trait ScriptTrait {
     /// run in parallel.
     fn can_be_parallel(&self) -> bool;
 }
-
 
 /// This trait represents a repository of scripts.
 pub trait ScriptsRepositoryTrait: Send + Sync {
@@ -70,7 +68,6 @@ pub trait ScriptsRepositoryTrait: Send + Sync {
     ) -> Option<Self::JobsIter>;
 }
 
-
 /// This trait represents a Job that can be processed by Fisher.
 pub trait JobTrait<S: ScriptTrait> {
     /// The context that will be provided to the job.
@@ -88,7 +85,6 @@ pub trait JobTrait<S: ScriptTrait> {
     /// Get the name of the underlying script.
     fn script_name(&self) -> &str;
 }
-
 
 /// This trait represents the API of the processor
 pub trait ProcessorApiTrait<S: ScriptsRepositoryTrait>: Send {

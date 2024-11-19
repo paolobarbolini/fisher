@@ -15,21 +15,23 @@
 
 use serde_json;
 
-use providers::prelude::*;
 use common::prelude::*;
-
+use providers::prelude::*;
 
 lazy_static! {
     static ref GITLAB_EVENTS: Vec<&'static str> = vec![
-        "Push", "Tag Push", "Issue", "Note", "Merge Request", "Wiki Page",
-        "Build", "Pipeline", "Confidential Issue",
+        "Push",
+        "Tag Push",
+        "Issue",
+        "Note",
+        "Merge Request",
+        "Wiki Page",
+        "Build",
+        "Pipeline",
+        "Confidential Issue",
     ];
-
-    static ref GITLAB_HEADERS: Vec<&'static str> = vec![
-        "X-Gitlab-Event",
-    ];
+    static ref GITLAB_HEADERS: Vec<&'static str> = vec!["X-Gitlab-Event",];
 }
-
 
 #[derive(Debug, Deserialize)]
 pub struct GitLabProvider {
@@ -48,8 +50,9 @@ impl ProviderTrait for GitLabProvider {
                 if !GITLAB_EVENTS.contains(&event.as_ref()) {
                     // Return an error if the event doesn't exist
                     return Err(ErrorKind::ProviderGitLabInvalidEventName(
-                        event.clone()
-                    ).into());
+                        event.clone(),
+                    )
+                    .into());
                 }
             }
         }
@@ -121,7 +124,6 @@ impl ProviderTrait for GitLabProvider {
     }
 }
 
-
 fn normalize_event_name(input: &str) -> &str {
     // Strip the ending " Hook"
     if input.ends_with(" Hook") {
@@ -133,17 +135,15 @@ fn normalize_event_name(input: &str) -> &str {
     }
 }
 
-
 #[cfg(test)]
 mod tests {
-    use utils::testing::*;
-    use requests::{Request, RequestType};
-    use web::WebRequest;
     use providers::ProviderTrait;
+    use requests::{Request, RequestType};
     use scripts::EnvBuilder;
+    use utils::testing::*;
+    use web::WebRequest;
 
     use super::{normalize_event_name, GitLabProvider, GITLAB_EVENTS};
-
 
     fn base_request() -> WebRequest {
         let mut base = dummy_web_request();
@@ -154,7 +154,6 @@ mod tests {
 
         base
     }
-
 
     #[test]
     fn test_new() {
@@ -183,16 +182,16 @@ mod tests {
         }
     }
 
-
     #[test]
     fn test_validate_request_type() {
         let provider = GitLabProvider::new("{}").unwrap();
 
         for event in GITLAB_EVENTS.iter() {
             let mut request = base_request();
-            request
-                .headers
-                .insert("X-Gitlab-Event".to_string(), format!("{} Hook", event));
+            request.headers.insert(
+                "X-Gitlab-Event".to_string(),
+                format!("{} Hook", event),
+            );
 
             assert_eq!(
                 provider.validate(&request.into()),
@@ -200,7 +199,6 @@ mod tests {
             );
         }
     }
-
 
     #[test]
     fn test_validate_basic() {
@@ -231,7 +229,6 @@ mod tests {
         assert_eq!(provider.validate(&req.into()), RequestType::ExecuteHook);
     }
 
-
     #[test]
     fn test_validate_secret() {
         let provider = GitLabProvider::new(r#"{"secret": "abcde"}"#).unwrap();
@@ -261,7 +258,6 @@ mod tests {
             .insert("X-Gitlab-Token".to_string(), "abcde".to_string());
         assert_eq!(provider.validate(&req.into()), RequestType::ExecuteHook);
     }
-
 
     #[test]
     fn test_validate_events() {
@@ -303,22 +299,24 @@ mod tests {
         );
     }
 
-
     #[test]
     fn test_build_env() {
         let mut req = base_request();
-        req.headers.insert("X-Gitlab-Event".into(), "Push Hook".to_string());
+        req.headers
+            .insert("X-Gitlab-Event".into(), "Push Hook".to_string());
 
         let provider = GitLabProvider::new("{}").unwrap();
         let mut b = EnvBuilder::dummy();
         provider.build_env(&req.into(), &mut b).unwrap();
 
-        assert_eq!(b.dummy_data().env, hashmap! {
-            "EVENT".into() => "Push".into(),
-        });
+        assert_eq!(
+            b.dummy_data().env,
+            hashmap! {
+                "EVENT".into() => "Push".into(),
+            }
+        );
         assert_eq!(b.dummy_data().files, hashmap!());
     }
-
 
     #[test]
     fn test_normalize_event_name() {

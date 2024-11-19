@@ -22,11 +22,9 @@ use std::io::Read;
 use std::path::Path;
 
 use fisher::*;
-use nix::sys::signal::{Signal, SigSet};
-
+use nix::sys::signal::{SigSet, Signal};
 
 static VERSION: Option<&'static str> = option_env!("CARGO_PKG_VERSION");
-
 
 fn show_version() {
     if let Some(version) = VERSION {
@@ -36,7 +34,6 @@ fn show_version() {
     }
 }
 
-
 fn usage(exit_code: i32, error_msg: &str) -> ! {
     if error_msg.len() > 0 {
         println!("Error: {}\n", error_msg);
@@ -45,7 +42,6 @@ fn usage(exit_code: i32, error_msg: &str) -> ! {
     println!("Execute `fisher --help` for more details");
     ::std::process::exit(exit_code);
 }
-
 
 fn parse_cli() -> String {
     // Parse the CLI args
@@ -92,7 +88,6 @@ fn parse_cli() -> String {
     }
 }
 
-
 fn read_config<P: AsRef<Path>>(path: P) -> Result<Config> {
     // Read the configuration from a file
     let mut file = fs::File::open(path)?;
@@ -103,7 +98,6 @@ fn read_config<P: AsRef<Path>>(path: P) -> Result<Config> {
         Error::from_kind(ErrorKind::BoxedError(Box::new(e)).into())
     })?)
 }
-
 
 fn app() -> Result<()> {
     // Capture only the signals Fisher uses
@@ -145,7 +139,6 @@ fn app() -> Result<()> {
 
     Ok(())
 }
-
 
 fn main() {
     if let Err(err) = app() {

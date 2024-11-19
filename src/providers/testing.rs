@@ -16,9 +16,8 @@
 use std::net::IpAddr;
 use std::str::FromStr;
 
-use providers::prelude::*;
 use common::prelude::*;
-
+use providers::prelude::*;
 
 #[derive(Debug)]
 pub struct TestingProvider {
@@ -100,19 +99,17 @@ impl ProviderTrait for TestingProvider {
     }
 }
 
-
 #[cfg(test)]
 mod tests {
     use std::net::IpAddr;
     use std::str::FromStr;
 
-    use utils::testing::*;
-    use requests::RequestType;
     use providers::ProviderTrait;
+    use requests::RequestType;
     use scripts::EnvBuilder;
+    use utils::testing::*;
 
     use super::TestingProvider;
-
 
     #[test]
     fn test_new() {
@@ -120,7 +117,6 @@ mod tests {
         assert!(TestingProvider::new("SOMETHING").is_ok());
         assert!(TestingProvider::new("FAIL").is_err());
     }
-
 
     #[test]
     fn test_validate() {
@@ -169,7 +165,6 @@ mod tests {
         assert_eq!(p.validate(&req.into()), RequestType::Ping);
     }
 
-
     #[test]
     fn test_build_env() {
         let p = TestingProvider::new("").unwrap();
@@ -178,12 +173,18 @@ mod tests {
         let mut b = EnvBuilder::dummy();
         p.build_env(&dummy_web_request().into(), &mut b).unwrap();
 
-        assert_eq!(b.dummy_data().env, hashmap! {
-            "PREPARED".into() => "prepared".into(),
-        });
-        assert_eq!(b.dummy_data().files, hashmap! {
-            "prepared".into() => "prepared\n".bytes().collect::<Vec<_>>(),
-        });
+        assert_eq!(
+            b.dummy_data().env,
+            hashmap! {
+                "PREPARED".into() => "prepared".into(),
+            }
+        );
+        assert_eq!(
+            b.dummy_data().files,
+            hashmap! {
+                "prepared".into() => "prepared\n".bytes().collect::<Vec<_>>(),
+            }
+        );
 
         // With the env param
         let mut req = dummy_web_request();
@@ -192,13 +193,19 @@ mod tests {
         let mut b = EnvBuilder::dummy();
         p.build_env(&req.into(), &mut b).unwrap();
 
-        assert_eq!(b.dummy_data().env, hashmap! {
-            "PREPARED".into() => "prepared".into(),
-            "ENV".into() => "test".into(),
-        });
-        assert_eq!(b.dummy_data().files, hashmap! {
-            "prepared".into() => "prepared\n".bytes().collect::<Vec<_>>(),
-        });
+        assert_eq!(
+            b.dummy_data().env,
+            hashmap! {
+                "PREPARED".into() => "prepared".into(),
+                "ENV".into() => "test".into(),
+            }
+        );
+        assert_eq!(
+            b.dummy_data().files,
+            hashmap! {
+                "prepared".into() => "prepared\n".bytes().collect::<Vec<_>>(),
+            }
+        );
     }
 
     #[test]

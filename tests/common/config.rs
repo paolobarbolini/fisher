@@ -22,7 +22,6 @@ use std::path::PathBuf;
 use common::env::TestingEnv;
 use common::prelude::*;
 
-
 #[derive(Serialize)]
 pub struct Config<'a> {
     pub http: HttpConfig,
@@ -47,9 +46,7 @@ impl<'a> Config<'a> {
                 path: testing_env.scripts_path().to_str().unwrap().to_string(),
                 recursive: false,
             },
-            jobs: JobsConfig {
-                threads: 1,
-            },
+            jobs: JobsConfig { threads: 1 },
             env: HashMap::new(),
 
             testing_env,
@@ -63,7 +60,6 @@ impl<'a> Config<'a> {
     }
 }
 
-
 #[derive(Serialize)]
 #[serde(rename_all = "kebab-case")]
 pub struct HttpConfig {
@@ -73,12 +69,10 @@ pub struct HttpConfig {
     pub health_endpoint: bool,
 }
 
-
 #[derive(Serialize)]
 pub struct JobsConfig {
     pub threads: u16,
 }
-
 
 #[derive(Serialize)]
 pub struct ScriptsConfig {

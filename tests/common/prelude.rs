@@ -13,8 +13,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-pub use common::env::testing_env;
 pub use common::config::Config;
+pub use common::env::testing_env;
 
 error_chain! {
     foreign_links {

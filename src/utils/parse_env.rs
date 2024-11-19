@@ -15,7 +15,6 @@
 
 use common::prelude::*;
 
-
 pub fn parse_env(line: &str) -> Result<(&str, &str)> {
     if let Some(pos) = line.find('=') {
         let (key, value) = line.split_at(pos);
@@ -25,11 +24,9 @@ pub fn parse_env(line: &str) -> Result<(&str, &str)> {
     }
 }
 
-
 #[cfg(test)]
 mod tests {
     use super::parse_env;
-
 
     #[test]
     fn test_parse_env() {

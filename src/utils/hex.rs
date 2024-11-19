@@ -15,7 +15,6 @@
 
 use common::prelude::*;
 
-
 pub fn from_hex(input: &str) -> Result<Vec<u8>> {
     let mut result = Vec::with_capacity(input.len() / 2);
 
@@ -31,8 +30,9 @@ pub fn from_hex(input: &str) -> Result<Vec<u8>> {
             b'A'...b'F' => byte - b'A' + 10,
             _ => {
                 return Err(ErrorKind::HexInvalidChar(
-                    input[i..].chars().next().unwrap()
-                ).into());
+                    input[i..].chars().next().unwrap(),
+                )
+                .into());
             }
         };
 
@@ -50,7 +50,6 @@ pub fn from_hex(input: &str) -> Result<Vec<u8>> {
         Ok(result)
     }
 }
-
 
 #[cfg(test)]
 mod tests {

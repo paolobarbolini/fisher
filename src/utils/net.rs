@@ -38,13 +38,11 @@ pub fn parse_forwarded_for(headers: &Headers) -> Result<Vec<IpAddr>> {
     Ok(result)
 }
 
-
 #[cfg(test)]
 mod tests {
     use std::net::IpAddr;
 
     use super::{parse_forwarded_for, Headers};
-
 
     #[test]
     fn test_parse_forwarded_for() {
@@ -75,7 +73,10 @@ mod tests {
 
         // Test with a non-IP address
         let mut headers = Headers::new();
-        headers.insert("X-Forwarded-For".into(), "127.0.0.1, hey, 10.0.0.1".into());
+        headers.insert(
+            "X-Forwarded-For".into(),
+            "127.0.0.1, hey, 10.0.0.1".into(),
+        );
         assert!(parse_forwarded_for(&headers).is_err());
     }
 }

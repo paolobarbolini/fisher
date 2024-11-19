@@ -27,11 +27,9 @@ use regex::Regex;
 use common::config::Config;
 use common::prelude::*;
 
-
 lazy_static! {
     static ref ADDR_RE: Regex = Regex::new(r"127\.0\.0\.1:[0-9]+").unwrap();
 }
-
 
 fn binaries_path() -> Result<PathBuf> {
     let mut current = env::current_exe()?;
@@ -44,13 +42,11 @@ fn binaries_path() -> Result<PathBuf> {
     Ok(current)
 }
 
-
 #[allow(dead_code)]
 pub enum Stream {
     Stdout,
     Stderr,
 }
-
 
 pub struct Command {
     child: process::Child,
@@ -113,7 +109,6 @@ impl Command {
     }
 }
 
-
 pub struct FisherCommand {
     inner: Command,
 }
@@ -121,9 +116,7 @@ pub struct FisherCommand {
 impl FisherCommand {
     pub fn new(config: &Config) -> Result<Self> {
         Ok(FisherCommand {
-            inner: Command::new("fisher", &[
-                config.save()?.to_str().unwrap(),
-            ])?,
+            inner: Command::new("fisher", &[config.save()?.to_str().unwrap()])?,
         })
     }
 

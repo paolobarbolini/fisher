@@ -20,7 +20,6 @@ use serde_json;
 use common::prelude::*;
 use common::structs::HealthDetails;
 
-
 #[derive(Debug)]
 pub enum Response {
     NotFound,
@@ -68,21 +67,19 @@ impl Response {
                     Response::Ok | Response::HealthStatus(..) => "ok",
                 },
             }),
-        }).unwrap()
+        })
+        .unwrap()
     }
 
     pub fn headers(&self) -> Option<Vec<String>> {
         match *self {
             Response::TooManyRequests(ref duration) => {
-                Some(vec![
-                    format!("Retry-After: {}", duration.as_secs()),
-                ])
-            },
+                Some(vec![format!("Retry-After: {}", duration.as_secs())])
+            }
             _ => None,
         }
     }
 }
-
 
 #[cfg(test)]
 mod tests {
@@ -95,12 +92,10 @@ mod tests {
 
     use super::Response;
 
-
     #[inline]
     fn j(input: String) -> serde_json::Value {
         serde_json::from_str(&input).unwrap()
     }
-
 
     #[test]
     fn test_not_found() {
@@ -113,12 +108,8 @@ mod tests {
         let obj = json.as_object().unwrap();
 
         // The status must be "not_found"
-        assert_eq!(
-            obj.get("status").unwrap().as_str().unwrap(),
-            "not_found"
-        );
+        assert_eq!(obj.get("status").unwrap().as_str().unwrap(), "not_found");
     }
-
 
     #[test]
     fn test_forbidden() {
@@ -131,12 +122,8 @@ mod tests {
         let obj = json.as_object().unwrap();
 
         // The status must be "forbidden"
-        assert_eq!(
-            obj.get("status").unwrap().as_str().unwrap(),
-            "forbidden"
-        );
+        assert_eq!(obj.get("status").unwrap().as_str().unwrap(), "forbidden");
     }
-
 
     #[test]
     fn test_bad_request() {
@@ -153,10 +140,7 @@ mod tests {
         let obj = json.as_object().unwrap();
 
         // The status must be "forbidden"
-        assert_eq!(
-            obj.get("status").unwrap().as_str().unwrap(),
-            "bad_request"
-        );
+        assert_eq!(obj.get("status").unwrap().as_str().unwrap(), "bad_request");
 
         // The error_msg must be the error's message
         assert_eq!(
@@ -171,17 +155,17 @@ mod tests {
         assert_eq!(response.status(), 429);
 
         // Ensure headers are correct
-        assert_eq!(response.headers(), Some(vec![
-            "Retry-After: 10".into(),
-        ]));
+        assert_eq!(response.headers(), Some(vec!["Retry-After: 10".into(),]));
 
         // Ensure the response is correct
-        assert_eq!(j(response.json()), json!({
-            "status": "too_many_requests",
-            "retry_after": 10,
-        }));
+        assert_eq!(
+            j(response.json()),
+            json!({
+                "status": "too_many_requests",
+                "retry_after": 10,
+            })
+        );
     }
-
 
     #[test]
     fn test_unavailable() {
@@ -194,12 +178,8 @@ mod tests {
         let obj = json.as_object().unwrap();
 
         // The status must be "unavailable"
-        assert_eq!(
-            obj.get("status").unwrap().as_str().unwrap(),
-            "unavailable"
-        );
+        assert_eq!(obj.get("status").unwrap().as_str().unwrap(), "unavailable");
     }
-
 
     #[test]
     fn test_ok() {
@@ -212,12 +192,8 @@ mod tests {
         let obj = json.as_object().unwrap();
 
         // The status must be "ok"
-        assert_eq!(
-            obj.get("status").unwrap().as_str().unwrap(),
-            "ok"
-        );
+        assert_eq!(obj.get("status").unwrap().as_str().unwrap(), "ok");
     }
-
 
     #[test]
     fn test_health_status() {
@@ -233,12 +209,8 @@ mod tests {
         assert_eq!(response.status(), 200);
         assert!(response.headers().is_none());
 
-
         // The status must be "ok"
-        assert_eq!(
-            obj.get("status").unwrap().as_str().unwrap(),
-            "ok"
-        );
+        assert_eq!(obj.get("status").unwrap().as_str().unwrap(), "ok");
 
         // It must have an object called "result"
         let result = obj.get("result").unwrap().as_object().unwrap();

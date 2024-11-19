@@ -19,7 +19,6 @@ use serde_json;
 
 use providers::prelude::*;
 
-
 #[derive(Debug, Deserialize)]
 pub struct StandaloneProvider {
     secret: Option<String>,
@@ -62,7 +61,8 @@ impl ProviderTrait for StandaloneProvider {
 
         // Check if the secret code is valid
         if let Some(ref correct_secret) = self.secret {
-            let secret = if let Some(found) = req.params.get(&self.param_name()) {
+            let secret = if let Some(found) = req.params.get(&self.param_name())
+            {
                 // Secret in the request parameters
                 found
             } else if let Some(found) = req.headers.get(&self.header_name()) {
@@ -94,18 +94,16 @@ impl ProviderTrait for StandaloneProvider {
     }
 }
 
-
 #[cfg(test)]
 mod tests {
     use std::collections::HashMap;
 
-    use utils::testing::*;
-    use requests::RequestType;
     use providers::ProviderTrait;
+    use requests::RequestType;
     use scripts::EnvBuilder;
+    use utils::testing::*;
 
     use super::StandaloneProvider;
-
 
     #[test]
     fn test_new() {
@@ -120,7 +118,11 @@ mod tests {
             r#"{"from": ["127.0.0.1"], "secret": "abcde"}"#,
         ];
         for one in &right {
-            assert!(StandaloneProvider::new(one).is_ok(), "Should be valid: {}", one);
+            assert!(
+                StandaloneProvider::new(one).is_ok(),
+                "Should be valid: {}",
+                one
+            );
         }
 
         let wrong = vec![
@@ -132,7 +134,11 @@ mod tests {
             r#"{"from": ["256.0.0.1"]}"#,
         ];
         for one in &wrong {
-            assert!(StandaloneProvider::new(one).is_err(), "Should be invalid: {}", one);
+            assert!(
+                StandaloneProvider::new(one).is_err(),
+                "Should be invalid: {}",
+                one
+            );
         }
     }
 
@@ -148,7 +154,11 @@ mod tests {
         test_validate_inner_secret(config_custom, "a", "X-A");
     }
 
-    fn test_validate_inner_secret(config: &str, param_name: &str, header_name: &str) {
+    fn test_validate_inner_secret(
+        config: &str,
+        param_name: &str,
+        header_name: &str,
+    ) {
         let p = StandaloneProvider::new(config).unwrap();
 
         // Test a request with no headers or params
@@ -202,7 +212,6 @@ mod tests {
             assert_eq!(p.validate(&req.into()), RequestType::ExecuteHook);
         }
     }
-
 
     #[test]
     fn test_build_env() {

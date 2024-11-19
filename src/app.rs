@@ -13,19 +13,18 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+use std::collections::HashMap;
 use std::net::SocketAddr;
 use std::path::Path;
 use std::sync::Arc;
-use std::collections::HashMap;
 
+use common::config::{Config, HttpConfig};
 use common::prelude::*;
 use common::state::State;
-use common::config::{Config, HttpConfig};
 
-use scripts::{Blueprint, Repository, JobContext};
 use processor::{Processor, ProcessorApi};
+use scripts::{Blueprint, JobContext, Repository};
 use web::WebApp;
-
 
 struct InnerApp {
     locked: bool,
@@ -77,7 +76,9 @@ impl InnerApp {
     }
 
     fn set_scripts_path<P: AsRef<Path>>(
-        &mut self, path: P, recursive: bool,
+        &mut self,
+        path: P,
+        recursive: bool,
     ) -> Result<()> {
         self.scripts_blueprint.clear();
         self.scripts_blueprint.collect_path(path, recursive)?;
@@ -89,7 +90,7 @@ impl InnerApp {
     fn set_job_environment(&self, env: HashMap<String, String>) -> Result<()> {
         self.processor.api().update_context(JobContext {
             environment: env,
-            .. JobContext::default()
+            ..JobContext::default()
         })?;
         Ok(())
     }
@@ -144,7 +145,6 @@ impl InnerApp {
     }
 }
 
-
 pub struct Fisher {
     config: Config,
     inner: InnerApp,
@@ -153,17 +153,13 @@ pub struct Fisher {
 impl Fisher {
     pub fn new(config: Config) -> Result<Self> {
         let mut inner = InnerApp::new()?;
-        inner.set_scripts_path(
-            &config.scripts.path, config.scripts.recursive,
-        )?;
+        inner
+            .set_scripts_path(&config.scripts.path, config.scripts.recursive)?;
         inner.set_job_environment(config.env.clone())?;
         inner.set_threads_count(config.jobs.threads)?;
         inner.restart_http_server(&config.http)?;
 
-        Ok(Fisher {
-            config,
-            inner,
-        })
+        Ok(Fisher { config, inner })
     }
 
     pub fn web_address(&self) -> Option<&SocketAddr> {

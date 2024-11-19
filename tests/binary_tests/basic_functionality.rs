@@ -18,19 +18,21 @@ use std::io::Read;
 
 use reqwest;
 
-use common::prelude::*;
 use common::command::FisherCommand;
-
+use common::prelude::*;
 
 #[test]
 fn fisher_executes_webhooks() {
     testing_env(|env| {
         let out = env.tempdir()?.join("out").to_str().unwrap().to_string();
 
-        env.create_script("test.sh", &[
-            r#"#!/bin/bash"#,
-            r#"echo "executed" > "${TEST_OUTPUT_FILE}""#,
-        ])?;
+        env.create_script(
+            "test.sh",
+            &[
+                r#"#!/bin/bash"#,
+                r#"echo "executed" > "${TEST_OUTPUT_FILE}""#,
+            ],
+        )?;
 
         let mut config = env.config();
         config.env.insert("TEST_OUTPUT_FILE".into(), out.clone());

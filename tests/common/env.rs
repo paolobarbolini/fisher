@@ -23,7 +23,6 @@ use tempdir::TempDir;
 
 use common::prelude::*;
 
-
 pub struct TestingEnv {
     tempdirs: RefCell<Vec<PathBuf>>,
     scripts_dir: PathBuf,
@@ -72,7 +71,6 @@ impl TestingEnv {
         Ok(())
     }
 }
-
 
 pub fn testing_env<F: Fn(&mut TestingEnv) -> Result<()>>(f: F) {
     let mut env = TestingEnv::new().unwrap();

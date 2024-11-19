@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#![recursion_limit="256"]
+#![recursion_limit = "256"]
 
 extern crate ansi_term;
 #[macro_use]
@@ -22,12 +22,12 @@ extern crate error_chain;
 extern crate hyper;
 #[macro_use]
 extern crate lazy_static;
+extern crate hmac;
 extern crate nix;
 extern crate rand;
 extern crate regex;
-extern crate hmac;
-extern crate sha1;
 extern crate serde;
+extern crate sha1;
 #[macro_use]
 extern crate serde_derive;
 #[macro_use]
@@ -40,12 +40,12 @@ extern crate users;
 #[macro_use]
 mod utils;
 mod app;
+pub mod common;
 mod processor;
 mod providers;
 mod requests;
 mod scripts;
 mod web;
-pub mod common;
 
 // Public API
 pub use app::Fisher;

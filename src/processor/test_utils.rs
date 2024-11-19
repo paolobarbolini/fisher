@@ -15,11 +15,10 @@
 
 use std::collections::{HashMap, VecDeque};
 use std::fmt::{self, Debug};
-use std::sync::{Arc, Mutex, RwLock};
 use std::sync::atomic::{AtomicUsize, Ordering};
+use std::sync::{Arc, Mutex, RwLock};
 
 use common::prelude::*;
-
 
 pub struct Script<I: Send + Sync + Debug + Clone> {
     id: usize,
@@ -45,13 +44,10 @@ impl<I: Send + Sync + Debug + Clone> Debug for Script<I> {
         write!(
             f,
             "Script {{ id: {}, name: {}, can_be_parallel: {} }}",
-            self.id,
-            self.name,
-            self.can_be_parallel,
+            self.id, self.name, self.can_be_parallel,
         )
     }
 }
-
 
 #[derive(Debug, Clone)]
 pub struct Job<I: Send + Sync + Debug + Clone> {
@@ -75,7 +71,6 @@ impl<I: Send + Sync + Debug + Clone> JobTrait<Script<I>> for Job<I> {
         &self.script.name
     }
 }
-
 
 pub struct Repository<I: Send + Sync + Debug + Clone> {
     last_id: AtomicUsize,
@@ -164,7 +159,6 @@ impl<I: Send + Sync + Debug + Clone> ScriptsRepositoryTrait for Repository<I> {
     }
 }
 
-
 pub struct SimpleIter<T> {
     values: VecDeque<T>,
 }
@@ -182,7 +176,6 @@ impl<T> Iterator for SimpleIter<T> {
         self.values.pop_front()
     }
 }
-
 
 pub fn test_wrapper<F: Fn() -> Result<()>>(func: F) {
     let result = func();

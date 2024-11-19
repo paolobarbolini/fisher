@@ -13,10 +13,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-use std::path::{Path, PathBuf};
-use std::fs;
 use std::env;
-
+use std::fs;
+use std::path::{Path, PathBuf};
 
 /// Convert a path relative to the current directory, if possible.
 ///
@@ -25,7 +24,7 @@ use std::env;
 fn relative_to_current<P: AsRef<Path>>(original_path: P) -> PathBuf {
     let mut result = PathBuf::new();
 
-    let current = if let Ok(curr) = env::current_dir(){
+    let current = if let Ok(curr) = env::current_dir() {
         curr
     } else {
         return original_path.as_ref().to_path_buf();
@@ -49,7 +48,6 @@ fn relative_to_current<P: AsRef<Path>>(original_path: P) -> PathBuf {
 
     result
 }
-
 
 error_chain! {
     foreign_links {

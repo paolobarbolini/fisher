@@ -28,7 +28,6 @@ use common::state::State;
 use scripts::Script;
 use web::WebRequest;
 
-
 pub struct TestEnv {
     state: Arc<State>,
     scripts_dir: PathBuf,
@@ -90,13 +89,11 @@ impl TestEnv {
         Ok(())
     }
 
-
     pub fn load_script(&self, name: &str) -> Result<Script> {
         let path = self.scripts_dir().join(name).to_str().unwrap().to_string();
         Ok(Script::load(name.into(), path, &self.state)?)
     }
 }
-
 
 pub fn dummy_web_request() -> WebRequest {
     WebRequest {
@@ -106,7 +103,6 @@ pub fn dummy_web_request() -> WebRequest {
         body: String::new(),
     }
 }
-
 
 pub fn test_wrapper<F: Fn(&mut TestEnv) -> Result<()>>(func: F) {
     let mut env = TestEnv::new().unwrap();

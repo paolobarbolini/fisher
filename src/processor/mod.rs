@@ -21,9 +21,9 @@
 mod api;
 mod scheduled_job;
 mod scheduler;
-mod thread;
-mod types;
 #[cfg(test)]
 mod test_utils;
+mod thread;
+mod types;
 
 pub use processor::api::{Processor, ProcessorApi};

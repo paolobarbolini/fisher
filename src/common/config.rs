@@ -17,16 +17,15 @@
 //! Fisher.
 
 use std::collections::HashMap;
-use std::str::FromStr;
-use std::net::SocketAddr;
 use std::fmt;
+use std::net::SocketAddr;
 use std::result::Result as StdResult;
+use std::str::FromStr;
 
-use serde::de::{Error as DeError, Visitor, Deserialize, Deserializer};
+use serde::de::{Deserialize, Deserializer, Error as DeError, Visitor};
 
 use common::prelude::*;
 use utils;
-
 
 macro_rules! default {
     ($struct:ident {$( $key:ident: $value:expr, )*}) => {
@@ -45,9 +44,8 @@ macro_rules! default_fn {
         fn $name() -> $type {
             $val
         }
-    }
+    };
 }
-
 
 /// The Fisher configuration.
 #[derive(Debug, Default, PartialEq, Eq, Deserialize)]
@@ -66,21 +64,20 @@ pub struct Config {
     pub env: HashMap<String, String>,
 }
 
-
 /// Configuration for the built-in HTTP webhooks receiver.
 #[derive(Debug, PartialEq, Eq, Deserialize)]
 pub struct HttpConfig {
     /// The number of proxies Fisher is behind.
-    #[serde(rename="behind-proxies", default="default_behind_proxies")]
+    #[serde(rename = "behind-proxies", default = "default_behind_proxies")]
     pub behind_proxies: u8,
     /// The socket address to bind.
-    #[serde(default="default_bind")]
+    #[serde(default = "default_bind")]
     pub bind: SocketAddr,
     /// The rate limit for bad requests
-    #[serde(rename="rate-limit", default)]
+    #[serde(rename = "rate-limit", default)]
     pub rate_limit: RateLimitConfig,
     /// Enable or disable the health endpoint
-    #[serde(rename="health-endpoint", default="default_health_endpoint")]
+    #[serde(rename = "health-endpoint", default = "default_health_endpoint")]
     pub health_endpoint: bool,
 }
 
@@ -94,7 +91,6 @@ default!(HttpConfig {
     rate_limit: RateLimitConfig::default(),
     health_endpoint: default_health_endpoint(),
 });
-
 
 /// Configuration for rate limiting.
 #[derive(Debug, PartialEq, Eq)]
@@ -112,7 +108,8 @@ default!(RateLimitConfig {
 
 impl RateLimitConfig {
     fn from_str_internal(s: &str) -> Result<RateLimitConfig> {
-        let slash_pos = s.char_indices()
+        let slash_pos = s
+            .char_indices()
             .filter(|ci| ci.1 == '/')
             .map(|ci| ci.0)
             .collect::<Vec<_>>();
@@ -128,7 +125,7 @@ impl RateLimitConfig {
                     allowed: requests.parse()?,
                     interval: (&interval[1..]).parse()?,
                 })
-            },
+            }
             _ => Err(ErrorKind::RateLimitConfigTooManySlashes.into()),
         }
     }
@@ -175,7 +172,6 @@ impl<'de> Deserialize<'de> for RateLimitConfig {
     }
 }
 
-
 /// Configuration for running jobs.
 #[derive(Debug, PartialEq, Eq, Deserialize)]
 pub struct JobsConfig {
@@ -189,7 +185,6 @@ default_fn!(default_threads: u16 = 1);
 default!(JobsConfig {
     threads: default_threads(),
 });
-
 
 /// Configuration for looking scripts up.
 #[derive(Debug, PartialEq, Eq, Deserialize)]

@@ -14,9 +14,8 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 use common::prelude::*;
-use web::WebRequest;
 use providers::StatusEvent;
-
+use web::WebRequest;
 
 #[derive(Debug, PartialEq, Eq, Copy, Clone)]
 pub enum RequestType {
@@ -24,7 +23,6 @@ pub enum RequestType {
     Ping,
     Invalid,
 }
-
 
 #[derive(Debug, Clone)]
 pub enum Request {
@@ -42,13 +40,11 @@ impl Request {
     }
 }
 
-
 impl From<WebRequest> for Request {
     fn from(from: WebRequest) -> Request {
         Request::Web(from)
     }
 }
-
 
 impl From<StatusEvent> for Request {
     fn from(from: StatusEvent) -> Request {

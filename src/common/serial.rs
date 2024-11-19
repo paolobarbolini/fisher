@@ -27,7 +27,6 @@
 use std::cmp::Ordering;
 use std::fmt;
 
-
 /// Opaque, infinite serial.
 ///
 /// Check out the [module documentation](index.html) for more details.
@@ -107,11 +106,9 @@ impl PartialOrd for Serial {
     }
 }
 
-
 #[cfg(test)]
 mod tests {
     use super::Serial;
-
 
     #[test]
     fn test_basic_ordering() {
@@ -120,7 +117,6 @@ mod tests {
 
         assert!(old < new);
     }
-
 
     #[test]
     fn test_overflowing() {
@@ -141,7 +137,6 @@ mod tests {
         assert!(old3 < new);
         assert!(old1 < new);
     }
-
 
     #[test]
     fn test_incr() {

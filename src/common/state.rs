@@ -20,10 +20,9 @@
 //! [`State`](struct.State.html) struct is also marked as Sync and Send, so
 //! it can be used across threads without locking.
 
-use std::sync::atomic::{AtomicUsize, Ordering};
-use std::cmp::PartialOrd;
 use std::cmp::Ordering as CmpOrdering;
-
+use std::cmp::PartialOrd;
+use std::sync::atomic::{AtomicUsize, Ordering};
 
 /// This enum represents a kind of ID.
 ///
@@ -37,9 +36,9 @@ pub enum IdKind {
     /// This kind should be used to identify threads.
     ThreadId,
 
-    #[doc(hidden)] __NonExaustiveMatch,
+    #[doc(hidden)]
+    __NonExaustiveMatch,
 }
-
 
 /// This struct contains an unique ID.
 ///
@@ -63,7 +62,6 @@ impl PartialOrd for UniqueId {
         }
     }
 }
-
 
 /// This struct keeps the global state of Fisher.
 
@@ -90,11 +88,9 @@ impl State {
     }
 }
 
-
 #[cfg(test)]
 mod tests {
     use super::{IdKind, State};
-
 
     #[test]
     fn test_next_id() {

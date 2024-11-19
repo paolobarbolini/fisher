@@ -13,29 +13,25 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-mod status;
-mod standalone;
 mod github;
 mod gitlab;
+mod standalone;
+mod status;
 #[cfg(test)]
 pub mod testing;
 
-
 pub mod prelude {
+    pub use common::prelude::*;
     pub use providers::ProviderTrait;
     pub use requests::{Request, RequestType};
-    pub use common::prelude::*;
     pub use scripts::EnvBuilder;
 }
 
-
 pub use self::status::{StatusEvent, StatusEventKind, StatusProvider};
 
-
-use requests::{Request, RequestType};
 use common::prelude::*;
+use requests::{Request, RequestType};
 use scripts::EnvBuilder;
-
 
 /// This trait should be implemented by every Fisher provider
 /// The objects implementing this trait must also implement Clone and Debug
@@ -61,7 +57,6 @@ pub trait ProviderTrait: ::std::fmt::Debug {
         true
     }
 }
-
 
 macro_rules! ProviderEnum {
     ($($cfg:meta | $name:ident => $provider:path),*) => {
@@ -141,7 +136,6 @@ macro_rules! ProviderEnum {
         }
     };
 }
-
 
 ProviderEnum! {
     any(test, not(test)) | Standalone => self::standalone::StandaloneProvider,

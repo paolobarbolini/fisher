@@ -19,14 +19,13 @@ pub mod testing;
 #[cfg(test)]
 mod parse_env;
 
-mod net;
 mod hex;
+mod net;
 mod parse_time;
-
 
 #[cfg(test)]
 pub use utils::parse_env::parse_env;
 
-pub use utils::net::parse_forwarded_for;
 pub use utils::hex::from_hex;
+pub use utils::net::parse_forwarded_for;
 pub use utils::parse_time::{parse_time, TimeString};

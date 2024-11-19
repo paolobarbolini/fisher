@@ -14,17 +14,16 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 use std::net::IpAddr;
-use std::sync::{Arc, Mutex};
 use std::sync::atomic::{AtomicBool, Ordering};
+use std::sync::{Arc, Mutex};
 
-use common::prelude::*;
 use common::config::RateLimitConfig;
+use common::prelude::*;
 
 use requests::{Request, RequestType};
-use scripts::{Repository, Job};
+use scripts::{Job, Repository};
 use web::rate_limits::RateLimiter;
 use web::responses::Response;
-
 
 #[derive(Clone)]
 pub struct WebApi<A: ProcessorApiTrait<Repository>> {
@@ -51,7 +50,10 @@ impl<A: ProcessorApiTrait<Repository>> WebApi<A> {
 
         WebApi {
             processor: Arc::new(Mutex::new(processor)),
-            hooks, locked, limiter, health_enabled,
+            hooks,
+            locked,
+            limiter,
+            health_enabled,
         }
     }
 
@@ -97,7 +99,7 @@ impl<A: ProcessorApiTrait<Repository>> WebApi<A> {
                     .unwrap();
 
                 Response::Ok
-            },
+            }
 
             RequestType::Invalid => {
                 // Increment the limits for the user
@@ -106,7 +108,7 @@ impl<A: ProcessorApiTrait<Repository>> WebApi<A> {
                 }
 
                 Response::Forbidden
-            },
+            }
         }
     }
 

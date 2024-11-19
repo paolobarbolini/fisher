@@ -13,32 +13,49 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-use serde_json;
 use hmac::{Hmac, Mac};
+use serde_json;
 use sha1;
 
+use common::prelude::*;
 use providers::prelude::*;
 use utils;
-use common::prelude::*;
-
 
 lazy_static! {
     static ref GITHUB_EVENTS: Vec<&'static str> = vec![
-        "commit_comment", "create", "delete", "deployment",
-        "deployment_status", "fork", "gollum", "issue_comment", "issues",
-        "label", "member", "membership", "milestone", "organization",
-        "page_build", "project_card", "project_column", "project", "public",
-        "pull_reques_review_comment", "pull_request_review", "pull_request",
-        "push", "repository", "release", "status", "team", "team_add", "watch",
+        "commit_comment",
+        "create",
+        "delete",
+        "deployment",
+        "deployment_status",
+        "fork",
+        "gollum",
+        "issue_comment",
+        "issues",
+        "label",
+        "member",
+        "membership",
+        "milestone",
+        "organization",
+        "page_build",
+        "project_card",
+        "project_column",
+        "project",
+        "public",
+        "pull_reques_review_comment",
+        "pull_request_review",
+        "pull_request",
+        "push",
+        "repository",
+        "release",
+        "status",
+        "team",
+        "team_add",
+        "watch",
     ];
-
-    static ref GITHUB_HEADERS: Vec<&'static str> = vec![
-        "X-GitHub-Event",
-        "X-Hub-Signature",
-        "X-GitHub-Delivery",
-    ];
+    static ref GITHUB_HEADERS: Vec<&'static str> =
+        vec!["X-GitHub-Event", "X-Hub-Signature", "X-GitHub-Delivery",];
 }
-
 
 #[derive(Deserialize)]
 struct PushEvent<'src> {
@@ -51,7 +68,6 @@ struct PushEvent<'src> {
 struct PushCommit<'src> {
     id: &'src str,
 }
-
 
 #[derive(Debug, Deserialize)]
 pub struct GitHubProvider {
@@ -69,8 +85,9 @@ impl ProviderTrait for GitHubProvider {
                 if !GITHUB_EVENTS.contains(&event.as_ref()) {
                     // Return an error if the event doesn't exist
                     return Err(ErrorKind::ProviderGitHubInvalidEventName(
-                        event.clone()
-                    ).into());
+                        event.clone(),
+                    )
+                    .into());
                 }
             }
         }
@@ -142,7 +159,12 @@ impl ProviderTrait for GitHubProvider {
 
         // Add specific environment variables for the `push` event
         let event = &req.headers["X-GitHub-Event"];
-        if self.events.as_ref().and_then(|e| Some(e.contains(event))).unwrap_or(false) {
+        if self
+            .events
+            .as_ref()
+            .and_then(|e| Some(e.contains(event)))
+            .unwrap_or(false)
+        {
             if *event == "push" {
                 let parsed: PushEvent = serde_json::from_str(&req.body)?;
                 b.add_env("PUSH_REF", parsed.git_ref);
@@ -153,7 +175,6 @@ impl ProviderTrait for GitHubProvider {
         Ok(())
     }
 }
-
 
 fn verify_signature(secret: &str, payload: &str, raw_signature: &str) -> bool {
     type HmacSha1 = Hmac<sha1::Sha1>;
@@ -192,17 +213,15 @@ fn verify_signature(secret: &str, payload: &str, raw_signature: &str) -> bool {
     mac.verify(&signature).is_ok()
 }
 
-
 #[cfg(test)]
 mod tests {
-    use utils::testing::*;
-    use requests::RequestType;
-    use web::WebRequest;
     use providers::ProviderTrait;
+    use requests::RequestType;
     use scripts::EnvBuilder;
+    use utils::testing::*;
+    use web::WebRequest;
 
     use super::{verify_signature, GitHubProvider, GITHUB_EVENTS};
-
 
     #[test]
     fn test_new() {
@@ -232,7 +251,6 @@ mod tests {
         }
     }
 
-
     #[test]
     fn test_request_type() {
         let provider = GitHubProvider::new("{}").unwrap();
@@ -241,18 +259,15 @@ mod tests {
         macro_rules! assert_req_type {
             ($provider:expr, $event:expr, $expected:expr) => {
                 let mut request = dummy_web_request();
-                let _ = request.headers.insert(
-                    "X-GitHub-Event".into(),
-                    $event.to_string(),
-                );
-                let _ = request.headers.insert(
-                    "X-GitHub-Delivery".into(),
-                    "12345".into(),
-                );
-                let _ = request.headers.insert(
-                    "X-Hub-Signature".into(),
-                    "invalid".into(),
-                );
+                let _ = request
+                    .headers
+                    .insert("X-GitHub-Event".into(), $event.to_string());
+                let _ = request
+                    .headers
+                    .insert("X-GitHub-Delivery".into(), "12345".into());
+                let _ = request
+                    .headers
+                    .insert("X-Hub-Signature".into(), "invalid".into());
                 request.body = "{}".into();
 
                 assert_eq!($provider.validate(&request.into()), $expected);
@@ -265,47 +280,49 @@ mod tests {
         }
     }
 
-
     #[test]
     fn test_build_env() {
         let mut req = dummy_web_request();
         req.headers.insert("X-GitHub-Event".into(), "ping".into());
-        req.headers.insert("X-GitHub-Delivery".into(), "12345".into());
+        req.headers
+            .insert("X-GitHub-Delivery".into(), "12345".into());
 
         let provider = GitHubProvider::new("{}").unwrap();
         let mut b = EnvBuilder::dummy();
         provider.build_env(&req.into(), &mut b).unwrap();
 
-        assert_eq!(b.dummy_data().env, hashmap! {
-            "EVENT".into() => "ping".into(),
-            "DELIVERY_ID".into() => "12345".into(),
-        });
+        assert_eq!(
+            b.dummy_data().env,
+            hashmap! {
+                "EVENT".into() => "ping".into(),
+                "DELIVERY_ID".into() => "12345".into(),
+            }
+        );
         assert_eq!(b.dummy_data().files, hashmap!());
     }
-
 
     fn dummy_push_event_request(event: &str) -> WebRequest {
         let mut req = dummy_web_request();
 
-        req.headers.insert("X-GitHub-Delivery".into(), "12345".into());
+        req.headers
+            .insert("X-GitHub-Delivery".into(), "12345".into());
         req.headers.insert("X-GitHub-Event".into(), event.into());
         req.body = ::serde_json::to_string(&json!({
             "ref": "refs/heads/master",
             "head_commit": json!({
                 "id": "deadbeef",
             }),
-        })).unwrap();
+        }))
+        .unwrap();
 
         req
     }
 
-
     #[test]
     fn test_build_env_event_push_wrong_event() {
         let req = dummy_push_event_request("ping");
-        let provider = GitHubProvider::new(
-            r#"{"events": ["create", "push"]}"#
-        ).unwrap();
+        let provider =
+            GitHubProvider::new(r#"{"events": ["create", "push"]}"#).unwrap();
 
         let mut b = EnvBuilder::dummy();
         provider.build_env(&req.into(), &mut b).unwrap();
@@ -313,7 +330,6 @@ mod tests {
         assert_eq!(b.dummy_data().env.get("PUSH_REF"), None);
         assert_eq!(b.dummy_data().env.get("PUSH_HEAD"), None);
     }
-
 
     #[test]
     fn test_build_env_event_push_no_whitelist() {
@@ -327,7 +343,6 @@ mod tests {
         assert_eq!(b.dummy_data().env.get("PUSH_HEAD"), None);
     }
 
-
     #[test]
     fn test_build_env_event_push_correct() {
         let req = dummy_push_event_request("push");
@@ -337,13 +352,14 @@ mod tests {
         provider.build_env(&req.into(), &mut b).unwrap();
 
         assert_eq!(
-            b.dummy_data().env.get("PUSH_REF"), Some(&"refs/heads/master".into())
+            b.dummy_data().env.get("PUSH_REF"),
+            Some(&"refs/heads/master".into())
         );
         assert_eq!(
-            b.dummy_data().env.get("PUSH_HEAD"), Some(&"deadbeef".into())
+            b.dummy_data().env.get("PUSH_HEAD"),
+            Some(&"deadbeef".into())
         );
     }
-
 
     #[test]
     fn test_verify_signature() {

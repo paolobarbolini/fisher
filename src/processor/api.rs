@@ -19,11 +19,10 @@ use common::prelude::*;
 use common::state::State;
 use common::structs::HealthDetails;
 
-use processor::scheduler::{Scheduler, SchedulerInput};
 #[cfg(test)]
 use processor::scheduler::DebugDetails;
+use processor::scheduler::{Scheduler, SchedulerInput};
 use processor::types::{Job, JobContext};
-
 
 /// This struct allows you to spawn a new processor, stop it and get its
 /// [`ProcessorApi`](struct.ProcessorApi.html).
@@ -79,7 +78,6 @@ impl<S: ScriptsRepositoryTrait> Processor<S> {
         }
     }
 }
-
 
 /// This struct allows you to interact with a running processor.
 

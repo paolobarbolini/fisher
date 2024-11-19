@@ -13,14 +13,13 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-use std::slice::Iter as SliceIter;
 use std::net::IpAddr;
+use std::slice::Iter as SliceIter;
 
 use serde_json;
 
 use providers::prelude::*;
 use scripts::JobOutput;
-
 
 #[derive(Debug, Clone)]
 pub enum StatusEvent {
@@ -40,20 +39,19 @@ impl StatusEvent {
     #[inline]
     pub fn script_name(&self) -> &str {
         match *self {
-            StatusEvent::JobCompleted(ref output) |
-            StatusEvent::JobFailed(ref output) => &output.script_name,
+            StatusEvent::JobCompleted(ref output)
+            | StatusEvent::JobFailed(ref output) => &output.script_name,
         }
     }
 
     #[inline]
     pub fn source_ip(&self) -> IpAddr {
         match *self {
-            StatusEvent::JobCompleted(ref output) |
-            StatusEvent::JobFailed(ref output) => output.request_ip,
+            StatusEvent::JobCompleted(ref output)
+            | StatusEvent::JobFailed(ref output) => output.request_ip,
         }
     }
 }
-
 
 #[derive(Debug, Hash, PartialEq, Eq, Copy, Clone, Deserialize)]
 #[serde(rename_all = "kebab-case")]
@@ -70,7 +68,6 @@ impl StatusEventKind {
         }
     }
 }
-
 
 #[derive(Debug, Deserialize)]
 pub struct StatusProvider {
@@ -142,16 +139,22 @@ impl ProviderTrait for StatusProvider {
             }
             StatusEvent::JobFailed(ref out) => {
                 b.add_env("SUCCESS", "0");
-                b.add_env("EXIT_CODE", if let Some(c) = out.exit_code {
-                    c.to_string()
-                } else {
-                    String::with_capacity(0)
-                });
-                b.add_env("SIGNAL", if let Some(s) = out.signal {
-                    s.to_string()
-                } else {
-                    String::with_capacity(0)
-                });
+                b.add_env(
+                    "EXIT_CODE",
+                    if let Some(c) = out.exit_code {
+                        c.to_string()
+                    } else {
+                        String::with_capacity(0)
+                    },
+                );
+                b.add_env(
+                    "SIGNAL",
+                    if let Some(s) = out.signal {
+                        s.to_string()
+                    } else {
+                        String::with_capacity(0)
+                    },
+                );
 
                 write!(b.data_file("stdout")?, "{}", out.stdout)?;
                 write!(b.data_file("stderr")?, "{}", out.stderr)?;
@@ -168,16 +171,14 @@ impl ProviderTrait for StatusProvider {
     }
 }
 
-
 #[cfg(test)]
 mod tests {
-    use utils::testing::*;
-    use requests::RequestType;
     use providers::ProviderTrait;
+    use requests::RequestType;
     use scripts::EnvBuilder;
+    use utils::testing::*;
 
     use super::{StatusEvent, StatusProvider};
-
 
     #[test]
     fn config_script_allowed() {
@@ -199,7 +200,6 @@ mod tests {
         assert_custom!(Some(vec!["something".to_string()]), "test", false);
         assert_custom!(Some(vec!["test".to_string()]), "test", true);
     }
-
 
     #[test]
     fn test_new() {
@@ -231,7 +231,6 @@ mod tests {
             assert!(StatusProvider::new(&wrong).is_err());
         }
     }
-
 
     #[test]
     fn test_validate() {
@@ -271,40 +270,42 @@ mod tests {
         );
     }
 
-
     #[test]
     fn test_env_builder_job_completed() {
-        let provider = StatusProvider::new(
-            r#"{"events": ["job-failed"]}"#,
-        ).unwrap();
+        let provider =
+            StatusProvider::new(r#"{"events": ["job-failed"]}"#).unwrap();
 
         let event = StatusEvent::JobCompleted(dummy_job_output());
         let mut b = EnvBuilder::dummy();
         provider.build_env(&event.into(), &mut b).unwrap();
 
-        assert_eq!(b.dummy_data().env, hashmap! {
-            "EVENT".into() => "job-completed".into(),
-            "SCRIPT_NAME".into() => "test".into(),
-            "SUCCESS".into() => "1".into(),
-            "EXIT_CODE".into() => "0".into(),
-            "SIGNAL".into() => "".into(),
+        assert_eq!(
+            b.dummy_data().env,
+            hashmap! {
+                "EVENT".into() => "job-completed".into(),
+                "SCRIPT_NAME".into() => "test".into(),
+                "SUCCESS".into() => "1".into(),
+                "EXIT_CODE".into() => "0".into(),
+                "SIGNAL".into() => "".into(),
 
-            // File paths
-            "STDOUT".into() => "stdout".into(),
-            "STDERR".into() => "stderr".into(),
-        });
-        assert_eq!(b.dummy_data().files, hashmap! {
-            "stdout".into() => "hello world".into(),
-            "stderr".into() => "something happened".into(),
-        });
+                // File paths
+                "STDOUT".into() => "stdout".into(),
+                "STDERR".into() => "stderr".into(),
+            }
+        );
+        assert_eq!(
+            b.dummy_data().files,
+            hashmap! {
+                "stdout".into() => "hello world".into(),
+                "stderr".into() => "something happened".into(),
+            }
+        );
     }
-
 
     #[test]
     fn test_env_builder_job_failed() {
-        let provider = StatusProvider::new(
-            r#"{"events": ["job-failed"]}"#,
-        ).unwrap();
+        let provider =
+            StatusProvider::new(r#"{"events": ["job-failed"]}"#).unwrap();
 
         let mut output = dummy_job_output();
         output.success = false;
@@ -315,20 +316,26 @@ mod tests {
         let mut b = EnvBuilder::dummy();
         provider.build_env(&event.into(), &mut b).unwrap();
 
-        assert_eq!(b.dummy_data().env, hashmap! {
-            "EVENT".into() => "job-failed".into(),
-            "SCRIPT_NAME".into() => "test".into(),
-            "SUCCESS".into() => "0".into(),
-            "EXIT_CODE".into() => "".into(),
-            "SIGNAL".into() => "9".into(),
+        assert_eq!(
+            b.dummy_data().env,
+            hashmap! {
+                "EVENT".into() => "job-failed".into(),
+                "SCRIPT_NAME".into() => "test".into(),
+                "SUCCESS".into() => "0".into(),
+                "EXIT_CODE".into() => "".into(),
+                "SIGNAL".into() => "9".into(),
 
-            // File paths
-            "STDOUT".into() => "stdout".into(),
-            "STDERR".into() => "stderr".into(),
-        });
-        assert_eq!(b.dummy_data().files, hashmap! {
-            "stdout".into() => "hello world".into(),
-            "stderr".into() => "something happened".into(),
-        });
+                // File paths
+                "STDOUT".into() => "stdout".into(),
+                "STDERR".into() => "stderr".into(),
+            }
+        );
+        assert_eq!(
+            b.dummy_data().files,
+            hashmap! {
+                "stdout".into() => "hello world".into(),
+                "stderr".into() => "something happened".into(),
+            }
+        );
     }
 }

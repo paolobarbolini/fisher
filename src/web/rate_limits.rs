@@ -30,15 +30,13 @@
 
 use std::collections::HashMap;
 use std::hash::Hash;
-use std::time::{Instant, Duration};
-
+use std::time::{Duration, Instant};
 
 #[derive(Debug)]
 enum LimitStatus {
     Unlimited,
     ClearsAt(Instant, Duration),
 }
-
 
 #[derive(Debug)]
 pub struct RateLimiter<Id: Hash + Eq + PartialEq> {
@@ -52,7 +50,7 @@ impl<Id: Hash + Eq + PartialEq> RateLimiter<Id> {
         RateLimiter {
             data: HashMap::new(),
             incr_step: Duration::from_millis(
-                (interval as f64 / allowed as f64 * 1000.0) as u64
+                (interval as f64 / allowed as f64 * 1000.0) as u64,
             ),
             limit_after: Duration::new(interval, 0),
         }
@@ -77,7 +75,7 @@ impl<Id: Hash + Eq + PartialEq> RateLimiter<Id> {
                         // The user is not rate limited but is close
                         None
                     }
-                },
+                }
                 LimitStatus::Unlimited => None,
             };
 
@@ -103,14 +101,12 @@ impl<Id: Hash + Eq + PartialEq> RateLimiter<Id> {
     }
 }
 
-
 #[cfg(test)]
 mod tests {
     use std::thread;
     use std::time::Duration;
 
     use super::RateLimiter;
-
 
     #[test]
     fn test_rate_limiter() {
@@ -127,7 +123,6 @@ mod tests {
         limiter.increment(1);
         assert!(limiter.is_limited(&1).is_some());
     }
-
 
     #[test]
     #[ignore]

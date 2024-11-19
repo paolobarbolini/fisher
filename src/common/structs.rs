@@ -15,7 +15,6 @@
 
 //! Structs used by Fisher.
 
-
 /// This struct contains some information about how the processor is feeling.
 
 #[derive(Copy, Clone, Debug, Serialize)]

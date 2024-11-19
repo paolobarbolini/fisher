@@ -13,14 +13,14 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#[cfg(test)]
-mod test_utils;
 mod collector;
 mod jobs;
 mod repository;
 mod script;
+#[cfg(test)]
+mod test_utils;
 
+pub use self::jobs::{Context as JobContext, EnvBuilder, Job, JobOutput};
 pub use self::repository::{Blueprint, Repository};
 pub use self::repository::{ScriptsIter, StatusJobsIter};
 pub use self::script::{Script, ScriptProvider};
-pub use self::jobs::{Job, JobOutput, Context as JobContext, EnvBuilder};
