@@ -15,6 +15,8 @@
 
 use std::net::IpAddr;
 
+use serde_derive::Deserialize;
+
 use crate::providers::prelude::*;
 
 #[derive(Debug, Deserialize)]

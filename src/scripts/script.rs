@@ -18,6 +18,7 @@ use std::io::{BufRead, BufReader};
 use std::sync::{Arc, LazyLock};
 
 use regex::Regex;
+use serde_derive::Deserialize;
 
 use crate::common::prelude::*;
 use crate::common::state::{IdKind, State, UniqueId};

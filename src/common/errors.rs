@@ -17,6 +17,8 @@ use std::env;
 use std::fs;
 use std::path::{Path, PathBuf};
 
+use error_chain::error_chain;
+
 /// Convert a path relative to the current directory, if possible.
 ///
 /// This is used to display prettier error messages, and returns the original

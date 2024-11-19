@@ -16,6 +16,8 @@
 use std::net::IpAddr;
 use std::slice::Iter as SliceIter;
 
+use serde_derive::Deserialize;
+
 use crate::providers::prelude::*;
 use crate::scripts::JobOutput;
 

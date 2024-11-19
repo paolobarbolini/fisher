@@ -14,15 +14,5 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #[macro_use]
-extern crate error_chain;
-extern crate nix;
-extern crate regex;
-extern crate reqwest;
-extern crate tempdir;
-extern crate toml;
-#[macro_use]
-extern crate serde_derive;
-
-#[macro_use]
 mod common;
 mod binary_tests;

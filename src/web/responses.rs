@@ -15,6 +15,8 @@
 
 use std::time::Duration;
 
+use serde_json::json;
+
 use crate::common::prelude::*;
 use crate::common::structs::HealthDetails;
 
@@ -83,7 +85,7 @@ impl Response {
 mod tests {
     use std::time::Duration;
 
-    use serde_json;
+    use serde_json::{self, json};
 
     use crate::common::prelude::*;
     use crate::common::structs::HealthDetails;

@@ -13,10 +13,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-extern crate fisher;
-extern crate nix;
-extern crate toml;
-
 use std::fs;
 use std::io::Read;
 use std::path::Path;

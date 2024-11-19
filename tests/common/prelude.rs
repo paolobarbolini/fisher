@@ -13,6 +13,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+use error_chain::error_chain;
+
 pub use crate::common::config::Config;
 pub use crate::common::env::testing_env;
 

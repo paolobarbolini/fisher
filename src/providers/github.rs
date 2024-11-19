@@ -14,6 +14,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 use hmac::{Hmac, Mac};
+use serde_derive::Deserialize;
 
 use crate::common::prelude::*;
 use crate::providers::prelude::*;
@@ -206,6 +207,8 @@ fn verify_signature(secret: &str, payload: &str, raw_signature: &str) -> bool {
 
 #[cfg(test)]
 mod tests {
+    use serde_json::json;
+
     use crate::providers::ProviderTrait;
     use crate::requests::RequestType;
     use crate::scripts::EnvBuilder;

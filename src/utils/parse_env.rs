@@ -13,6 +13,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+use error_chain::bail;
+
 use crate::common::prelude::*;
 
 pub fn parse_env(line: &str) -> Result<(&str, &str)> {

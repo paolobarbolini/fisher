@@ -15,6 +15,8 @@
 
 //! Structs used by Fisher.
 
+use serde_derive::Serialize;
+
 /// This struct contains some information about how the processor is feeling.
 
 #[derive(Copy, Clone, Debug, Serialize)]

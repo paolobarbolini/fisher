@@ -15,26 +15,6 @@
 
 #![recursion_limit = "256"]
 
-extern crate ansi_term;
-#[macro_use]
-extern crate error_chain;
-extern crate hmac;
-#[cfg(test)]
-extern crate hyper;
-extern crate nix;
-extern crate rand;
-extern crate regex;
-extern crate serde;
-extern crate sha1;
-#[macro_use]
-extern crate serde_derive;
-#[macro_use]
-extern crate serde_json;
-extern crate tempdir;
-extern crate tiny_http;
-extern crate url;
-extern crate users;
-
 #[macro_use]
 mod utils;
 mod app;

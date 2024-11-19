@@ -23,6 +23,7 @@ use std::result::Result as StdResult;
 use std::str::FromStr;
 
 use serde::de::{Deserialize, Deserializer, Error as DeError, Visitor};
+use serde_derive::Deserialize;
 
 use crate::common::prelude::*;
 use crate::utils;

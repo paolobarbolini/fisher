@@ -19,6 +19,8 @@ use std::io::Write;
 use std::net::SocketAddr;
 use std::path::PathBuf;
 
+use serde_derive::Serialize;
+
 use crate::common::env::TestingEnv;
 use crate::common::prelude::*;
 
