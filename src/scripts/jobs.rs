@@ -25,7 +25,7 @@ use std::process::{Command, Output};
 use std::sync::Arc;
 
 use nix::unistd::{setpgid, Pid};
-use tempdir::TempDir;
+use tempfile::TempDir;
 
 use crate::common::prelude::*;
 use crate::common::state::UniqueId;
@@ -251,8 +251,8 @@ impl Job {
         let mut command = Command::new(self.script.exec());
 
         // Use random directories
-        let working_directory = TempDir::new("fisher")?;
-        let data_directory = TempDir::new("fisher")?;
+        let working_directory = TempDir::with_prefix("fisher")?;
+        let data_directory = TempDir::with_prefix("fisher")?;
 
         // Prepare the command's environment
         {

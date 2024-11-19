@@ -19,7 +19,7 @@ use std::io::Write;
 use std::os::unix::fs::OpenOptionsExt;
 use std::path::{Path, PathBuf};
 
-use tempdir::TempDir;
+use tempfile::TempDir;
 
 use crate::common::prelude::*;
 
@@ -30,7 +30,8 @@ pub struct TestingEnv {
 
 impl TestingEnv {
     fn new() -> Result<Self> {
-        let scripts_dir = TempDir::new("fisher-integration")?.into_path();
+        let scripts_dir =
+            TempDir::with_prefix("fisher-integration")?.into_path();
 
         Ok(TestingEnv {
             tempdirs: RefCell::new(vec![scripts_dir.clone()]),
@@ -43,7 +44,7 @@ impl TestingEnv {
     }
 
     pub fn tempdir(&self) -> Result<PathBuf> {
-        let dir = TempDir::new("fisher-integration")?.into_path();
+        let dir = TempDir::with_prefix("fisher-integration")?.into_path();
         self.tempdirs.borrow_mut().push(dir.clone());
         Ok(dir)
     }

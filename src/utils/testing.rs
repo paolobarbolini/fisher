@@ -21,7 +21,7 @@ use std::sync::{mpsc, Arc};
 
 use ::hyper::method::Method;
 use hyper::client as hyper;
-use tempdir::TempDir;
+use tempfile::TempDir;
 
 use crate::common::config::{HttpConfig, RateLimitConfig};
 use crate::common::prelude::*;
@@ -121,7 +121,7 @@ macro_rules! create_hook {
 
 pub fn sample_hooks() -> PathBuf {
     // Create a sample directory with some hooks
-    let tempdir = TempDir::new("fisher-tests").unwrap().into_path();
+    let tempdir = TempDir::with_prefix("fisher-tests").unwrap().into_path();
 
     create_hook!(
         tempdir,

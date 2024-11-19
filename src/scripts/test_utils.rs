@@ -21,7 +21,7 @@ use std::os::unix::fs::OpenOptionsExt;
 use std::path::PathBuf;
 use std::sync::Arc;
 
-use tempdir::TempDir;
+use tempfile::TempDir;
 
 use crate::common::prelude::*;
 use crate::common::state::State;
@@ -36,7 +36,7 @@ pub struct TestEnv {
 
 impl TestEnv {
     fn new() -> Result<Self> {
-        let scripts_dir = TempDir::new("fisher-tests")?;
+        let scripts_dir = TempDir::with_prefix("fisher-tests")?;
 
         Ok(TestEnv {
             state: Arc::new(State::new()),
@@ -50,7 +50,7 @@ impl TestEnv {
     }
 
     pub fn tempdir(&mut self) -> Result<PathBuf> {
-        let dir = TempDir::new("fisher-tests")?;
+        let dir = TempDir::with_prefix("fisher-tests")?;
         let owned = dir.path().to_path_buf();
 
         self.temp_dirs.push(dir);
