@@ -48,17 +48,17 @@ impl<'a> From<&'a mut tiny_http::Request> for WebRequest {
         // Get the querystring
         let url = origin.url();
         let params = if url.contains('?') {
-            let query = url.rsplitn(2, '?').nth(0).unwrap();
+            let (_, query) = url.rsplit_once('?').unwrap();
             params_from_query(query)
         } else {
             HashMap::new()
         };
 
         WebRequest {
-            source: source,
-            headers: headers,
-            params: params,
-            body: body,
+            source,
+            headers,
+            params,
+            body,
         }
     }
 }

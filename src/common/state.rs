@@ -29,15 +29,13 @@ use std::sync::atomic::{AtomicUsize, Ordering};
 /// You should use this to specify which ID you do want.
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
+#[non_exhaustive]
 pub enum IdKind {
     /// This kind should be used to identify hooks.
     HookId,
 
     /// This kind should be used to identify threads.
     ThreadId,
-
-    #[doc(hidden)]
-    __NonExaustiveMatch,
 }
 
 /// This struct contains an unique ID.
@@ -83,8 +81,14 @@ impl State {
     pub fn next_id(&self, kind: IdKind) -> UniqueId {
         UniqueId {
             id: self.counter.fetch_add(1, Ordering::SeqCst),
-            kind: kind,
+            kind,
         }
+    }
+}
+
+impl Default for State {
+    fn default() -> Self {
+        Self::new()
     }
 }
 

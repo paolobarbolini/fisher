@@ -54,7 +54,7 @@ impl Serial {
     /// assert!(serial.next() > serial);
     /// ```
     pub fn next(&self) -> Serial {
-        let mut serial = self.clone();
+        let mut serial = *self;
 
         let (new, overflowed) = serial.increment.overflowing_add(1);
 

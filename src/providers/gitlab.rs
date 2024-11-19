@@ -88,7 +88,7 @@ impl ProviderTrait for GitLabProvider {
             }
         }
 
-        let event = normalize_event_name(&*req.headers["X-Gitlab-Event"]);
+        let event = normalize_event_name(&req.headers["X-Gitlab-Event"]);
 
         // Check if the event should be accepted
         if let Some(ref events) = self.events {
@@ -99,7 +99,7 @@ impl ProviderTrait for GitLabProvider {
         }
 
         // Check if the JSON body is valid
-        if !serde_json::from_str::<serde_json::Value>(&req.body).is_ok() {
+        if serde_json::from_str::<serde_json::Value>(&req.body).is_err() {
             return RequestType::Invalid;
         }
 
@@ -115,8 +115,7 @@ impl ProviderTrait for GitLabProvider {
         }
 
         // Get the current event name
-        let event_header =
-            normalize_event_name(&*req.headers["X-Gitlab-Event"]);
+        let event_header = normalize_event_name(&req.headers["X-Gitlab-Event"]);
 
         b.add_env("EVENT", event_header);
 
@@ -164,7 +163,7 @@ mod tests {
             r#"{"events": ["Push", "Issue"]}"#,
             r#"{"secret": "abcde", "events": ["Push", "Issue"]}"#,
         ] {
-            assert!(GitLabProvider::new(right).is_ok(), right.to_string());
+            assert!(GitLabProvider::new(right).is_ok(), "{}", right);
         }
 
         for wrong in &[
@@ -178,7 +177,7 @@ mod tests {
             r#"{"events": [true]}"#,
             r#"{"events": ["invalid_event"]}"#,
         ] {
-            assert!(GitLabProvider::new(wrong).is_err(), wrong.to_string());
+            assert!(GitLabProvider::new(wrong).is_err(), "{}", wrong);
         }
     }
 

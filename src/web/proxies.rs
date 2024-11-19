@@ -26,7 +26,7 @@ pub struct ProxySupport {
 
 impl ProxySupport {
     pub fn new(behind: u8) -> Self {
-        ProxySupport { behind: behind }
+        ProxySupport { behind }
     }
 
     pub fn source_ip(&self, req: &Request) -> Result<IpAddr> {

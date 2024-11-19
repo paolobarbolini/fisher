@@ -193,7 +193,7 @@ mod tests {
                     $expected
                 );
             }};
-        };
+        }
 
         assert_custom!(None, "test", true);
         assert_custom!(Some(vec![]), "test", false);

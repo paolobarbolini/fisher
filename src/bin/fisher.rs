@@ -35,7 +35,7 @@ fn show_version() {
 }
 
 fn usage(exit_code: i32, error_msg: &str) -> ! {
-    if error_msg.len() > 0 {
+    if !error_msg.is_empty() {
         println!("Error: {}\n", error_msg);
     }
     println!("Usage: fisher <config_file>");
@@ -51,7 +51,7 @@ fn parse_cli() -> String {
     let mut config_path = None;
 
     for arg in ::std::env::args().skip(1) {
-        if !only_args && arg.chars().next() == Some('-') {
+        if !only_args && arg.starts_with('-') {
             match arg.as_str() {
                 "--" => only_args = true,
                 "-h" | "--help" => flag_help = true,
@@ -94,9 +94,8 @@ fn read_config<P: AsRef<Path>>(path: P) -> Result<Config> {
     let mut buffer = String::new();
     file.read_to_string(&mut buffer)?;
 
-    Ok(toml::from_str(&buffer).map_err(|e| {
-        Error::from_kind(ErrorKind::BoxedError(Box::new(e)).into())
-    })?)
+    toml::from_str(&buffer)
+        .map_err(|e| Error::from_kind(ErrorKind::BoxedError(Box::new(e))))
 }
 
 fn app() -> Result<()> {

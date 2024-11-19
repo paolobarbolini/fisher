@@ -34,7 +34,7 @@ pub struct Config<'a> {
 }
 
 impl<'a> Config<'a> {
-    pub fn new(testing_env: &'a TestingEnv) -> Config {
+    pub fn new(testing_env: &'a TestingEnv) -> Config<'a> {
         Config {
             http: HttpConfig {
                 behind_proxies: 0,

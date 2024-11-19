@@ -40,7 +40,7 @@ impl Route {
         let regex = Self::regex_from_url(url);
 
         Route {
-            method: method,
+            method,
             regex: Regex::new(&regex).unwrap(),
         }
     }
@@ -74,19 +74,14 @@ impl Route {
             return None;
         }
 
-        match self.regex.captures(url) {
-            Some(captures) => {
-                Some(
-                    captures
-                        .iter()
-                        .skip(1)
-                        .filter_map(|x| x) // Strip Option<T>, returning T
-                        .map(|x| x.as_str().to_string())
-                        .collect(),
-                )
-            }
-            None => None,
-        }
+        self.regex.captures(url).map(|captures| {
+            captures
+                .iter()
+                .skip(1)
+                .flatten()
+                .map(|x| x.as_str().to_string())
+                .collect()
+        })
     }
 }
 
@@ -97,10 +92,7 @@ struct Handler<App: Send + Sync + 'static> {
 
 impl<App: Send + Sync + 'static> Handler<App> {
     fn new(handler: RequestHandler<App>, route: Route) -> Self {
-        Handler {
-            handler: handler,
-            route: route,
-        }
+        Handler { handler, route }
     }
 
     fn matches(&self, method: &Method, url: &str) -> Option<Vec<String>> {
@@ -313,7 +305,7 @@ mod tests {
             ($inp:expr) => {
                 Route::regex_from_url($inp)
             };
-        };
+        }
 
         assert_eq!(conv!("/"), r"^/(\?.*)?$");
         assert_eq!(conv!("/."), r"^/\.(\?.*)?$");

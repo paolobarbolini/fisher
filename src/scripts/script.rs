@@ -74,15 +74,13 @@ fn load_headers(file: &str) -> Result<LoadHeadersOutput> {
     let reader = BufReader::new(f);
 
     let mut content;
-    let mut line_number: u32 = 0;
     let mut providers = vec![];
     let mut preferences = None;
-    for line in reader.lines() {
-        line_number += 1;
+    for (line_number, line) in reader.lines().enumerate() {
         content = line.unwrap();
 
         // Just ignore everything after an empty line
-        if content == "" {
+        if content.is_empty() {
             break;
         }
 
@@ -101,9 +99,12 @@ fn load_headers(file: &str) -> Result<LoadHeadersOutput> {
                 Ok(provider) => {
                     providers.push(Arc::new(provider));
                 }
-                Err(mut error) => {
+                Err(error) => {
                     Err(error.chain_err(|| {
-                        ErrorKind::ScriptParsingError(file.into(), line_number)
+                        ErrorKind::ScriptParsingError(
+                            file.into(),
+                            line_number as u32,
+                        )
                     }))?;
                 }
             }
@@ -116,7 +117,7 @@ fn load_headers(file: &str) -> Result<LoadHeadersOutput> {
         } else {
             Preferences::empty()
         },
-        providers: providers,
+        providers,
     })
 }
 
@@ -140,8 +141,8 @@ impl Script {
 
         Ok(Script {
             id: state.next_id(IdKind::HookId),
-            name: name,
-            exec: exec,
+            name,
+            exec,
             priority: headers.preferences.priority(),
             parallel: headers.preferences.parallel(),
             providers: headers.providers,

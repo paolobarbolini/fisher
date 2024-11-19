@@ -42,7 +42,7 @@ fn fisher_executes_webhooks() {
 
         // Call the webhook
         let addr = fisher.server_addr()?;
-        let mut resp =
+        let resp =
             reqwest::blocking::get(&format!("http://{}/hook/test.sh", addr))?;
         assert_eq!(resp.status().as_u16(), 200);
         assert_eq!(resp.text()?, r#"{"status":"ok"}"#);

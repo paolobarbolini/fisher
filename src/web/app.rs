@@ -66,9 +66,9 @@ impl<A: ProcessorApiTrait<Repository>> WebApp<A> {
         let socket = server.listen(config.bind)?;
 
         Ok(WebApp {
-            server: server,
+            server,
             addr: socket,
-            locked: locked,
+            locked,
         })
     }
 

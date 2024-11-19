@@ -38,13 +38,13 @@ use scripts::EnvBuilder;
 pub trait ProviderTrait: ::std::fmt::Debug {
     /// This method should create a new instance of the provider, from a
     /// given configuration string
-    fn new(&str) -> Result<Self>
+    fn new(config: &str) -> Result<Self>
     where
         Self: Sized;
 
     /// This method should validate an incoming request, returning its
     /// type if the request is valid
-    fn validate(&self, &Request) -> RequestType;
+    fn validate(&self, req: &Request) -> RequestType;
 
     /// This method should build the environment to process an incoming
     /// request
@@ -94,7 +94,7 @@ macro_rules! ProviderEnum {
                     $(
                         #[cfg($cfg)]
                         Provider::$name(ref prov) => {
-                            (prov as &ProviderTrait).validate(req)
+                            (prov as &dyn ProviderTrait).validate(req)
                         },
                     )*
                 }
@@ -107,7 +107,7 @@ macro_rules! ProviderEnum {
                     $(
                         #[cfg($cfg)]
                         Provider::$name(ref prov) => {
-                            (prov as &ProviderTrait).build_env(req, builder)
+                            (prov as &dyn ProviderTrait).build_env(req, builder)
                         },
                     )*
                 }
@@ -118,7 +118,7 @@ macro_rules! ProviderEnum {
                     $(
                         #[cfg($cfg)]
                         Provider::$name(ref prov) => {
-                            (prov as &ProviderTrait).trigger_status_hooks(req)
+                            (prov as &dyn ProviderTrait).trigger_status_hooks(req)
                         }
                     )*
                 }

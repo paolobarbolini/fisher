@@ -191,7 +191,7 @@ impl<S: ScriptsRepositoryTrait> Thread<S> {
             return ProcessResult::Executing;
         }
 
-        return ProcessResult::Rejected(job);
+        ProcessResult::Rejected(job)
     }
 
     pub fn stop(self) {
@@ -266,7 +266,7 @@ mod tests {
         let start = Instant::now();
         loop {
             if start.elapsed().as_secs() > 10 {
-                panic!(error);
+                panic!("{}", error);
             }
 
             if func() {

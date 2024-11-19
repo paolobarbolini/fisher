@@ -41,10 +41,10 @@ impl Collector {
         dirs.push_front(read_dir(&base)?);
 
         Ok(Collector {
-            dirs: dirs,
-            state: state,
+            dirs,
+            state,
             base: base.as_ref().to_path_buf(),
-            recursive: recursive,
+            recursive,
         })
     }
 

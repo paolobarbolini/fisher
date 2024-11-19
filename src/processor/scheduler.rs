@@ -104,19 +104,19 @@ impl<S: ScriptsRepositoryTrait> Scheduler<S> {
         }
 
         Scheduler {
-            max_threads: max_threads,
-            hooks: hooks,
+            max_threads,
+            hooks,
             jobs_context: Arc::new(RwLock::new(Arc::new(ctx))),
-            state: state,
+            state,
 
             locked: false,
             should_stop: false,
             queue: BinaryHeap::new(),
-            waiting: waiting,
+            waiting,
             threads: HashMap::with_capacity(max_threads as usize),
 
-            input_send: input_send,
-            input_recv: input_recv,
+            input_send,
+            input_recv,
 
             last_cleanup: Instant::now(),
         }
@@ -166,7 +166,7 @@ impl<S: ScriptsRepositoryTrait> Scheduler<S> {
                     }
 
                     return_to.send(HealthDetails {
-                        queued_jobs: queued_jobs,
+                        queued_jobs,
                         busy_threads: busy_threads as u16,
                         max_threads: self.max_threads,
                     })?;
@@ -339,7 +339,7 @@ impl<S: ScriptsRepositoryTrait> Scheduler<S> {
         let mut to_remove = Vec::with_capacity(self.waiting.len());
         for (hook_id, waiting) in self.waiting.iter() {
             // This hook wasn't deleted
-            if self.hooks.id_exists(&hook_id) {
+            if self.hooks.id_exists(hook_id) {
                 continue;
             }
 
@@ -349,14 +349,14 @@ impl<S: ScriptsRepositoryTrait> Scheduler<S> {
             }
 
             // There are jobs in the queue
-            if queued.contains(&hook_id) {
+            if queued.contains(hook_id) {
                 continue;
             }
 
             to_remove.push(*hook_id);
         }
         for hook_id in &to_remove {
-            let _ = self.waiting.remove(&hook_id);
+            let _ = self.waiting.remove(hook_id);
         }
 
         // Add new hooks
@@ -438,7 +438,7 @@ impl<S: ScriptsRepositoryTrait> Scheduler<S> {
             }
         }
 
-        return false;
+        false
     }
 }
 

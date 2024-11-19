@@ -123,13 +123,12 @@ impl RepositoryInner {
             if let Provider::Status(ref status) = *provider.as_ref() {
                 // Load all the kinds of events
                 for event in status.events() {
-                    self.status_hooks
-                        .entry(*event)
-                        .or_insert_with(Vec::new)
-                        .push(ScriptProvider {
+                    self.status_hooks.entry(*event).or_default().push(
+                        ScriptProvider {
                             script: script.clone(),
                             provider: provider.clone(),
-                        });
+                        },
+                    );
                 }
             }
         }
@@ -202,7 +201,7 @@ impl Blueprint {
             collect_paths: Vec::new(),
 
             inner: Arc::new(RwLock::new(RepositoryInner::new())),
-            state: state,
+            state,
         }
     }
 

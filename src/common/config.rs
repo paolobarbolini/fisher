@@ -123,7 +123,7 @@ impl RateLimitConfig {
                 let (requests, interval) = s.split_at(slash_pos[0]);
                 Ok(RateLimitConfig {
                     allowed: requests.parse()?,
-                    interval: (&interval[1..]).parse()?,
+                    interval: interval[1..].parse()?,
                 })
             }
             _ => Err(ErrorKind::RateLimitConfigTooManySlashes.into()),

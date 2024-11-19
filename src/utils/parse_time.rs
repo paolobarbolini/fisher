@@ -37,7 +37,7 @@ fn parse_time_inner(input: &str) -> Result<usize> {
 
     for (i, c) in input.chars().enumerate() {
         match c {
-            '0'...'9' => number_len += 1,
+            '0'..='9' => number_len += 1,
             _ => {
                 if number_len > 0 {
                     number_temp = input[i - number_len..i].parse::<usize>()?;

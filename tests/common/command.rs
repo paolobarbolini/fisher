@@ -75,8 +75,8 @@ impl Command {
         stream: Stream,
     ) -> Result<String> {
         let reader = match stream {
-            Stream::Stdout => &mut self.stdout as &mut BufRead,
-            Stream::Stderr => &mut self.stderr as &mut BufRead,
+            Stream::Stdout => &mut self.stdout as &mut dyn BufRead,
+            Stream::Stderr => &mut self.stderr as &mut dyn BufRead,
         };
 
         let mut buffer = String::new();

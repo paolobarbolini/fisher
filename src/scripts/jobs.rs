@@ -35,9 +35,9 @@ use providers::Provider;
 use requests::Request;
 use scripts::Script;
 
-static DEFAULT_ENV: &[&'static str] = &["PATH", "LC_ALL", "LANG"];
+static DEFAULT_ENV: &[&str] = &["PATH", "LC_ALL", "LANG"];
 
-static ENV_PREFIX: &'static str = "FISHER";
+static ENV_PREFIX: &str = "FISHER";
 
 #[derive(Debug)]
 pub struct Context {
@@ -178,10 +178,10 @@ impl<'job> EnvBuilder<'job> {
         self.add_env_unprefixed(name, v);
     }
 
-    pub fn data_file<'a, P: AsRef<Path>>(
-        &'a mut self,
+    pub fn data_file<P: AsRef<Path>>(
+        &mut self,
         path: P,
-    ) -> Result<&'a mut Write> {
+    ) -> Result<&mut dyn Write> {
         let env = path
             .as_ref()
             .to_str()
@@ -197,7 +197,7 @@ impl<'job> EnvBuilder<'job> {
                 inner.command.env(name, &dest);
 
                 inner.last_file = Some(fs::File::create(&dest)?);
-                Ok(inner.last_file.as_mut().unwrap() as &mut Write)
+                Ok(inner.last_file.as_mut().unwrap() as &mut dyn Write)
             }
             #[cfg(test)]
             EnvBuilderInner::Dummy(ref mut inner) => {
@@ -207,7 +207,7 @@ impl<'job> EnvBuilder<'job> {
                     .insert(name.to_str().unwrap().into(), dest.clone());
 
                 inner.files.insert(dest.clone(), Vec::new());
-                Ok(inner.files.get_mut(&dest).unwrap() as &mut Write)
+                Ok(inner.files.get_mut(&dest).unwrap() as &mut dyn Write)
             }
         }
     }
@@ -249,7 +249,7 @@ impl Job {
     }
 
     fn process(&self, ctx: &Context) -> Result<JobOutput> {
-        let mut command = Command::new(&self.script.exec());
+        let mut command = Command::new(self.script.exec());
 
         // Use random directories
         let working_directory = TempDir::new("fisher")?;
@@ -258,7 +258,7 @@ impl Job {
         // Prepare the command's environment
         {
             let mut builder =
-                EnvBuilder::new(&mut command, &data_directory.path());
+                EnvBuilder::new(&mut command, data_directory.path());
             self.prepare_env(&mut builder, ctx)?;
         }
 
@@ -276,16 +276,18 @@ impl Job {
 
         // Apply the custom environment
         for (key, value) in ctx.environment.iter() {
-            command.env(&key, &value);
+            command.env(key, value);
         }
 
         // Make sure the process is isolated
-        command.before_exec(|| {
-            // If a new process group is not created, the job still works fine
-            let _ = setpgid(Pid::this(), Pid::from_raw(0));
+        unsafe {
+            command.pre_exec(|| {
+                // If a new process group is not created, the job still works fine
+                let _ = setpgid(Pid::this(), Pid::from_raw(0));
 
-            Ok(())
-        });
+                Ok(())
+            });
+        }
 
         // Execute the hook
         let output = command.output()?;
@@ -341,7 +343,7 @@ impl Job {
 
         // Write the request body on disk
         let mut file = fs::File::create(&path)?;
-        write!(file, "{}\n", body)?;
+        writeln!(file, "{}", body)?;
 
         Ok(Some(path))
     }
@@ -380,7 +382,7 @@ pub struct JobOutput {
 }
 
 impl JobOutput {
-    fn new<'a>(job: &'a Job, output: Output) -> Self {
+    fn new(job: &Job, output: Output) -> Self {
         JobOutput {
             stdout: String::from_utf8_lossy(&output.stdout).into_owned(),
             stderr: String::from_utf8_lossy(&output.stderr).into_owned(),

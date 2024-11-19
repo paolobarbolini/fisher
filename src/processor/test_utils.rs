@@ -24,7 +24,7 @@ pub struct Script<I: Send + Sync + Debug + Clone> {
     id: usize,
     name: String,
     can_be_parallel: bool,
-    func: Arc<Mutex<Box<Fn(I) -> Result<()> + Send>>>,
+    func: Arc<Mutex<Box<dyn Fn(I) -> Result<()> + Send>>>,
 }
 
 impl<I: Send + Sync + Debug + Clone> ScriptTrait for Script<I> {

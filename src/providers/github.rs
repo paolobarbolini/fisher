@@ -159,17 +159,12 @@ impl ProviderTrait for GitHubProvider {
 
         // Add specific environment variables for the `push` event
         let event = &req.headers["X-GitHub-Event"];
-        if self
-            .events
-            .as_ref()
-            .and_then(|e| Some(e.contains(event)))
-            .unwrap_or(false)
+        if self.events.as_ref().map_or(false, |e| e.contains(event))
+            && *event == "push"
         {
-            if *event == "push" {
-                let parsed: PushEvent = serde_json::from_str(&req.body)?;
-                b.add_env("PUSH_REF", parsed.git_ref);
-                b.add_env("PUSH_HEAD", parsed.head_commit.id);
-            }
+            let parsed: PushEvent = serde_json::from_str(&req.body)?;
+            b.add_env("PUSH_REF", parsed.git_ref);
+            b.add_env("PUSH_HEAD", parsed.head_commit.id);
         }
 
         Ok(())
@@ -232,7 +227,7 @@ mod tests {
             r#"{"events": ["push", "fork"]}"#,
             r#"{"secret": "abcde", "events": ["push", "fork"]}"#,
         ] {
-            assert!(GitHubProvider::new(right).is_ok(), right.to_string());
+            assert!(GitHubProvider::new(right).is_ok(), "{}", right);
         }
 
         // Checks for wrong configurations
@@ -247,7 +242,7 @@ mod tests {
             r#"{"events": [true]}"#,
             r#"{"events": ["invalid_event"]}"#,
         ] {
-            assert!(GitHubProvider::new(wrong).is_err(), wrong.to_string());
+            assert!(GitHubProvider::new(wrong).is_err(), "{}", wrong);
         }
     }
 
@@ -373,7 +368,8 @@ mod tests {
         ] {
             assert!(
                 !verify_signature("secret", "payload", signature),
-                signature.to_string()
+                "{}",
+                signature
             );
         }
 
