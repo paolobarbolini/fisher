@@ -17,10 +17,10 @@ use std::collections::{BinaryHeap, HashMap, HashSet};
 use std::sync::{mpsc, Arc, RwLock};
 use std::time::Instant;
 
-use common::prelude::*;
-use common::serial::Serial;
-use common::state::{State, UniqueId};
-use common::structs::HealthDetails;
+use crate::common::prelude::*;
+use crate::common::serial::Serial;
+use crate::common::state::{State, UniqueId};
+use crate::common::structs::HealthDetails;
 
 use super::scheduled_job::ScheduledJob;
 use super::thread::{ProcessResult, Thread, ThreadCompleter};
@@ -447,8 +447,8 @@ mod tests {
     use std::collections::VecDeque;
     use std::sync::{mpsc, Arc, Mutex};
 
-    use common::prelude::*;
-    use common::state::State;
+    use crate::common::prelude::*;
+    use crate::common::state::State;
 
     use super::super::test_utils::*;
     use super::super::Processor;

@@ -17,13 +17,13 @@ use std::collections::HashMap;
 use std::path::{Path, PathBuf};
 use std::sync::{Arc, RwLock};
 
-use common::prelude::*;
-use common::state::{State, UniqueId};
-use providers::{Provider, StatusEvent, StatusEventKind};
-use requests::Request;
-use scripts::collector::Collector;
-use scripts::jobs::{Job, JobOutput};
-use scripts::script::{Script, ScriptProvider};
+use crate::common::prelude::*;
+use crate::common::state::{State, UniqueId};
+use crate::providers::{Provider, StatusEvent, StatusEventKind};
+use crate::requests::Request;
+use crate::scripts::collector::Collector;
+use crate::scripts::jobs::{Job, JobOutput};
+use crate::scripts::script::{Script, ScriptProvider};
 
 pub struct ScriptsIter {
     inner: Arc<RwLock<RepositoryInner>>,
@@ -268,9 +268,9 @@ mod tests {
     use std::os::unix::fs as unix_fs;
     use std::sync::Arc;
 
-    use common::prelude::*;
-    use providers::StatusEventKind;
-    use scripts::test_utils::*;
+    use crate::common::prelude::*;
+    use crate::providers::StatusEventKind;
+    use crate::scripts::test_utils::*;
 
     use super::{Blueprint, Repository};
 

@@ -18,8 +18,8 @@ use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, Mutex};
 use std::thread;
 
-use common::prelude::*;
-use common::state::{IdKind, State, UniqueId};
+use crate::common::prelude::*;
+use crate::common::state::{IdKind, State, UniqueId};
 
 use super::scheduled_job::ScheduledJob;
 use super::types::ScriptId;
@@ -238,10 +238,10 @@ mod tests {
     use std::sync::{Arc, Mutex};
     use std::time::Instant;
 
-    use common::serial::Serial;
-    use common::state::State;
-    use processor::scheduled_job::ScheduledJob;
-    use processor::test_utils::*;
+    use crate::common::serial::Serial;
+    use crate::common::state::State;
+    use crate::processor::scheduled_job::ScheduledJob;
+    use crate::processor::test_utils::*;
 
     use super::Thread;
 

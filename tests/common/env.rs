@@ -21,7 +21,7 @@ use std::path::{Path, PathBuf};
 
 use tempdir::TempDir;
 
-use common::prelude::*;
+use crate::common::prelude::*;
 
 pub struct TestingEnv {
     tempdirs: RefCell<Vec<PathBuf>>,

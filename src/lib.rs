@@ -48,6 +48,6 @@ mod scripts;
 mod web;
 
 // Public API
-pub use app::Fisher;
-pub use common::config::Config;
-pub use common::errors::*;
+pub use crate::app::Fisher;
+pub use crate::common::config::Config;
+pub use crate::common::errors::*;

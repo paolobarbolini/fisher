@@ -19,8 +19,8 @@ use std::io::Write;
 use std::net::SocketAddr;
 use std::path::PathBuf;
 
-use common::env::TestingEnv;
-use common::prelude::*;
+use crate::common::env::TestingEnv;
+use crate::common::prelude::*;
 
 #[derive(Serialize)]
 pub struct Config<'a> {

@@ -124,7 +124,7 @@ error_chain! {
         }
 
         // Other errors
-        BoxedError(boxed: Box<::std::error::Error + Send + Sync>) {
+        BoxedError(boxed: Box<(dyn ::std::error::Error + Send + Sync)>) {
             description("generic error"),
             display("{}", boxed),
         }
@@ -175,8 +175,8 @@ impl<T> From<::std::sync::PoisonError<T>> for Error {
     }
 }
 
-impl From<Box<::std::error::Error + Send + Sync>> for Error {
-    fn from(err: Box<::std::error::Error + Send + Sync>) -> Error {
+impl From<Box<(dyn ::std::error::Error + Send + Sync)>> for Error {
+    fn from(err: Box<(dyn ::std::error::Error + Send + Sync)>) -> Error {
         ErrorKind::BoxedError(err).into()
     }
 }

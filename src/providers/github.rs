@@ -14,12 +14,10 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 use hmac::{Hmac, Mac};
-use serde_json;
-use sha1;
 
-use common::prelude::*;
-use providers::prelude::*;
-use utils;
+use crate::common::prelude::*;
+use crate::providers::prelude::*;
+use crate::utils;
 
 lazy_static! {
     static ref GITHUB_EVENTS: Vec<&'static str> = vec![
@@ -210,11 +208,11 @@ fn verify_signature(secret: &str, payload: &str, raw_signature: &str) -> bool {
 
 #[cfg(test)]
 mod tests {
-    use providers::ProviderTrait;
-    use requests::RequestType;
-    use scripts::EnvBuilder;
-    use utils::testing::*;
-    use web::WebRequest;
+    use crate::providers::ProviderTrait;
+    use crate::requests::RequestType;
+    use crate::scripts::EnvBuilder;
+    use crate::utils::testing::*;
+    use crate::web::WebRequest;
 
     use super::{verify_signature, GitHubProvider, GITHUB_EVENTS};
 

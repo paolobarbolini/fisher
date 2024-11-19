@@ -24,8 +24,8 @@ use std::str::FromStr;
 
 use serde::de::{Deserialize, Deserializer, Error as DeError, Visitor};
 
-use common::prelude::*;
-use utils;
+use crate::common::prelude::*;
+use crate::utils;
 
 macro_rules! default {
     ($struct:ident {$( $key:ident: $value:expr, )*}) => {

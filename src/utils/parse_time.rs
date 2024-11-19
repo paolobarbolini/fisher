@@ -19,7 +19,7 @@ use std::str::FromStr;
 
 use serde::de::{Deserialize, Deserializer, Error as DeError, Visitor};
 
-use common::prelude::*;
+use crate::common::prelude::*;
 
 /// Parse a time string and return the equivalent time in seconds.
 ///

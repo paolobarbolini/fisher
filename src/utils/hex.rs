@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-use common::prelude::*;
+use crate::common::prelude::*;
 
 pub fn from_hex(input: &str) -> Result<Vec<u8>> {
     let mut result = Vec::with_capacity(input.len() / 2);
@@ -53,7 +53,7 @@ pub fn from_hex(input: &str) -> Result<Vec<u8>> {
 
 #[cfg(test)]
 mod tests {
-    use common::prelude::*;
+    use crate::common::prelude::*;
 
     use super::from_hex;
 

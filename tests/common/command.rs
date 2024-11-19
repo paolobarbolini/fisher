@@ -24,8 +24,8 @@ use nix::sys::signal::{kill, Signal};
 use nix::unistd::Pid;
 use regex::Regex;
 
-use common::config::Config;
-use common::prelude::*;
+use crate::common::config::Config;
+use crate::common::prelude::*;
 
 lazy_static! {
     static ref ADDR_RE: Regex = Regex::new(r"127\.0\.0\.1:[0-9]+").unwrap();

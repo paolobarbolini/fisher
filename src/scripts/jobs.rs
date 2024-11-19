@@ -26,14 +26,13 @@ use std::sync::Arc;
 
 use nix::unistd::{setpgid, Pid};
 use tempdir::TempDir;
-use users;
 
-use common::prelude::*;
-use common::state::UniqueId;
+use crate::common::prelude::*;
+use crate::common::state::UniqueId;
 
-use providers::Provider;
-use requests::Request;
-use scripts::Script;
+use crate::providers::Provider;
+use crate::requests::Request;
+use crate::scripts::Script;
 
 static DEFAULT_ENV: &[&str] = &["PATH", "LC_ALL", "LANG"];
 
@@ -411,10 +410,10 @@ mod tests {
 
     use users;
 
-    use common::prelude::*;
-    use requests::Request;
-    use scripts::test_utils::*;
-    use utils;
+    use crate::common::prelude::*;
+    use crate::requests::Request;
+    use crate::scripts::test_utils::*;
+    use crate::utils;
 
     use super::{Context, Job, DEFAULT_ENV};
 

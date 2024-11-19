@@ -16,7 +16,6 @@
 use std::collections::HashMap;
 use std::net::IpAddr;
 
-use tiny_http;
 use url::form_urlencoded;
 
 #[derive(Debug, Clone)]

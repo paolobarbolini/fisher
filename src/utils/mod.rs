@@ -24,8 +24,8 @@ mod net;
 mod parse_time;
 
 #[cfg(test)]
-pub use utils::parse_env::parse_env;
+pub use crate::utils::parse_env::parse_env;
 
-pub use utils::hex::from_hex;
-pub use utils::net::parse_forwarded_for;
-pub use utils::parse_time::{parse_time, TimeString};
+pub use crate::utils::hex::from_hex;
+pub use crate::utils::net::parse_forwarded_for;
+pub use crate::utils::parse_time::{parse_time, TimeString};

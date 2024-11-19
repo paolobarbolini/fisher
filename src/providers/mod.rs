@@ -21,17 +21,17 @@ mod status;
 pub mod testing;
 
 pub mod prelude {
-    pub use common::prelude::*;
-    pub use providers::ProviderTrait;
-    pub use requests::{Request, RequestType};
-    pub use scripts::EnvBuilder;
+    pub use crate::common::prelude::*;
+    pub use crate::providers::ProviderTrait;
+    pub use crate::requests::{Request, RequestType};
+    pub use crate::scripts::EnvBuilder;
 }
 
 pub use self::status::{StatusEvent, StatusEventKind, StatusProvider};
 
-use common::prelude::*;
-use requests::{Request, RequestType};
-use scripts::EnvBuilder;
+use crate::common::prelude::*;
+use crate::requests::{Request, RequestType};
+use crate::scripts::EnvBuilder;
 
 /// This trait should be implemented by every Fisher provider
 /// The objects implementing this trait must also implement Clone and Debug

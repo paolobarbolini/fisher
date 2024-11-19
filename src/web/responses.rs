@@ -15,10 +15,8 @@
 
 use std::time::Duration;
 
-use serde_json;
-
-use common::prelude::*;
-use common::structs::HealthDetails;
+use crate::common::prelude::*;
+use crate::common::structs::HealthDetails;
 
 #[derive(Debug)]
 pub enum Response {
@@ -87,8 +85,8 @@ mod tests {
 
     use serde_json;
 
-    use common::prelude::*;
-    use common::structs::HealthDetails;
+    use crate::common::prelude::*;
+    use crate::common::structs::HealthDetails;
 
     use super::Response;
 

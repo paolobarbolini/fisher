@@ -16,7 +16,7 @@
 use std::collections::HashMap;
 use std::net::IpAddr;
 
-use common::prelude::*;
+use crate::common::prelude::*;
 
 pub type Headers = HashMap<String, String>;
 

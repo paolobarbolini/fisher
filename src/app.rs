@@ -18,13 +18,13 @@ use std::net::SocketAddr;
 use std::path::Path;
 use std::sync::Arc;
 
-use common::config::{Config, HttpConfig};
-use common::prelude::*;
-use common::state::State;
+use crate::common::config::{Config, HttpConfig};
+use crate::common::prelude::*;
+use crate::common::state::State;
 
-use processor::{Processor, ProcessorApi};
-use scripts::{Blueprint, JobContext, Repository};
-use web::WebApp;
+use crate::processor::{Processor, ProcessorApi};
+use crate::scripts::{Blueprint, JobContext, Repository};
+use crate::web::WebApp;
 
 struct InnerApp {
     locked: bool,

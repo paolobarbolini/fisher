@@ -19,18 +19,18 @@ use std::net::{IpAddr, Ipv4Addr};
 use std::path::PathBuf;
 use std::sync::{mpsc, Arc};
 
+use ::hyper::method::Method;
 use hyper::client as hyper;
-use hyper::method::Method;
 use tempdir::TempDir;
 
-use common::config::{HttpConfig, RateLimitConfig};
-use common::prelude::*;
-use common::state::State;
-use common::structs::HealthDetails;
+use crate::common::config::{HttpConfig, RateLimitConfig};
+use crate::common::prelude::*;
+use crate::common::state::State;
+use crate::common::structs::HealthDetails;
 
-use scripts::{Blueprint as HooksBlueprint, Repository as Hooks};
-use scripts::{Job, JobOutput};
-use web::{WebApp, WebRequest};
+use crate::scripts::{Blueprint as HooksBlueprint, Repository as Hooks};
+use crate::scripts::{Job, JobOutput};
+use crate::web::{WebApp, WebRequest};
 
 #[macro_export]
 macro_rules! assert_err {

@@ -15,9 +15,7 @@
 
 use std::net::IpAddr;
 
-use serde_json;
-
-use providers::prelude::*;
+use crate::providers::prelude::*;
 
 #[derive(Debug, Deserialize)]
 pub struct StandaloneProvider {
@@ -98,10 +96,10 @@ impl ProviderTrait for StandaloneProvider {
 mod tests {
     use std::collections::HashMap;
 
-    use providers::ProviderTrait;
-    use requests::RequestType;
-    use scripts::EnvBuilder;
-    use utils::testing::*;
+    use crate::providers::ProviderTrait;
+    use crate::requests::RequestType;
+    use crate::scripts::EnvBuilder;
+    use crate::utils::testing::*;
 
     use super::StandaloneProvider;
 

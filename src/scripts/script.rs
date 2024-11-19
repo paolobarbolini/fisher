@@ -18,13 +18,12 @@ use std::io::{BufRead, BufReader};
 use std::sync::Arc;
 
 use regex::Regex;
-use serde_json;
 
-use common::prelude::*;
-use common::state::{IdKind, State, UniqueId};
+use crate::common::prelude::*;
+use crate::common::state::{IdKind, State, UniqueId};
 
-use providers::Provider;
-use requests::{Request, RequestType};
+use crate::providers::Provider;
+use crate::requests::{Request, RequestType};
 
 #[derive(Debug, Clone)]
 pub struct ScriptProvider {
@@ -195,9 +194,9 @@ impl ScriptTrait for Script {
 
 #[cfg(test)]
 mod tests {
-    use common::prelude::*;
-    use requests::{Request, RequestType};
-    use scripts::test_utils::*;
+    use crate::common::prelude::*;
+    use crate::requests::{Request, RequestType};
+    use crate::scripts::test_utils::*;
 
     #[test]
     fn test_scripts_are_loaded_properly() {

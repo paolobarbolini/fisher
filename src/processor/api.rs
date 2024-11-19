@@ -15,14 +15,14 @@
 
 use std::sync::{mpsc, Arc};
 
-use common::prelude::*;
-use common::state::State;
-use common::structs::HealthDetails;
+use crate::common::prelude::*;
+use crate::common::state::State;
+use crate::common::structs::HealthDetails;
 
 #[cfg(test)]
-use processor::scheduler::DebugDetails;
-use processor::scheduler::{Scheduler, SchedulerInput};
-use processor::types::{Job, JobContext};
+use crate::processor::scheduler::DebugDetails;
+use crate::processor::scheduler::{Scheduler, SchedulerInput};
+use crate::processor::types::{Job, JobContext};
 
 /// This struct allows you to spawn a new processor, stop it and get its
 /// [`ProcessorApi`](struct.ProcessorApi.html).

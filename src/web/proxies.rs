@@ -15,9 +15,9 @@
 
 use std::net::IpAddr;
 
-use common::prelude::*;
-use requests::Request;
-use utils;
+use crate::common::prelude::*;
+use crate::requests::Request;
+use crate::utils;
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct ProxySupport {
@@ -76,9 +76,9 @@ mod tests {
     use std::net::IpAddr;
     use std::str::FromStr;
 
-    use common::prelude::*;
-    use requests::Request;
-    use utils::testing::*;
+    use crate::common::prelude::*;
+    use crate::requests::Request;
+    use crate::utils::testing::*;
 
     use super::ProxySupport;
 

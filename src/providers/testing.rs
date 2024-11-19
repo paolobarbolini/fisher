@@ -16,8 +16,8 @@
 use std::net::IpAddr;
 use std::str::FromStr;
 
-use common::prelude::*;
-use providers::prelude::*;
+use crate::common::prelude::*;
+use crate::providers::prelude::*;
 
 #[derive(Debug)]
 pub struct TestingProvider {
@@ -104,10 +104,10 @@ mod tests {
     use std::net::IpAddr;
     use std::str::FromStr;
 
-    use providers::ProviderTrait;
-    use requests::RequestType;
-    use scripts::EnvBuilder;
-    use utils::testing::*;
+    use crate::providers::ProviderTrait;
+    use crate::requests::RequestType;
+    use crate::scripts::EnvBuilder;
+    use crate::utils::testing::*;
 
     use super::TestingProvider;
 

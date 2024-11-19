@@ -15,8 +15,8 @@
 
 use std::cmp::Ordering;
 
-use common::prelude::*;
-use common::serial::Serial;
+use crate::common::prelude::*;
+use crate::common::serial::Serial;
 
 use super::types::{Job, JobContext, JobOutput, ScriptId};
 

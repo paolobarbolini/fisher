@@ -18,8 +18,8 @@ use std::io::Read;
 
 use reqwest;
 
-use common::command::FisherCommand;
-use common::prelude::*;
+use crate::common::command::FisherCommand;
+use crate::common::prelude::*;
 
 #[test]
 fn fisher_executes_webhooks() {

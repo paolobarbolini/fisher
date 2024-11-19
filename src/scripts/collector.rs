@@ -19,12 +19,12 @@ use std::os::unix::fs::PermissionsExt;
 use std::path::{Path, PathBuf};
 use std::sync::Arc;
 
-use common::prelude::*;
-use common::state::State;
+use crate::common::prelude::*;
+use crate::common::state::State;
 
-use scripts::Script;
+use crate::scripts::Script;
 
-pub(in scripts) struct Collector {
+pub(in crate::scripts) struct Collector {
     dirs: VecDeque<ReadDir>,
     state: Arc<State>,
     base: PathBuf,
@@ -32,7 +32,7 @@ pub(in scripts) struct Collector {
 }
 
 impl Collector {
-    pub(in scripts) fn new<P: AsRef<Path>>(
+    pub(in crate::scripts) fn new<P: AsRef<Path>>(
         base: P,
         state: Arc<State>,
         recursive: bool,
@@ -124,8 +124,8 @@ mod tests {
     use std::fs;
     use std::os::unix::fs::OpenOptionsExt;
 
-    use common::prelude::*;
-    use scripts::test_utils::*;
+    use crate::common::prelude::*;
+    use crate::scripts::test_utils::*;
 
     use super::Collector;
 

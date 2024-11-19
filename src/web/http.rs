@@ -23,10 +23,10 @@ use std::thread;
 use regex::{self, Regex};
 use tiny_http::{self, Method};
 
-use common::prelude::*;
-use requests::Request;
-use web::proxies::ProxySupport;
-use web::responses::Response;
+use crate::common::prelude::*;
+use crate::requests::Request;
+use crate::web::proxies::ProxySupport;
+use crate::web::responses::Response;
 
 pub type RequestHandler<App> = Box<fn(&App, &Request, Vec<String>) -> Response>;
 
@@ -276,9 +276,9 @@ mod tests {
     use tiny_http::Method;
 
     use super::{Handler, HttpServer, Route};
-    use requests::Request;
-    use utils::testing::*;
-    use web::responses::Response;
+    use crate::requests::Request;
+    use crate::utils::testing::*;
+    use crate::web::responses::Response;
 
     struct DummyData(Vec<String>);
 

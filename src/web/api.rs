@@ -17,13 +17,13 @@ use std::net::IpAddr;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, Mutex};
 
-use common::config::RateLimitConfig;
-use common::prelude::*;
+use crate::common::config::RateLimitConfig;
+use crate::common::prelude::*;
 
-use requests::{Request, RequestType};
-use scripts::{Job, Repository};
-use web::rate_limits::RateLimiter;
-use web::responses::Response;
+use crate::requests::{Request, RequestType};
+use crate::scripts::{Job, Repository};
+use crate::web::rate_limits::RateLimiter;
+use crate::web::responses::Response;
 
 #[derive(Clone)]
 pub struct WebApi<A: ProcessorApiTrait<Repository>> {

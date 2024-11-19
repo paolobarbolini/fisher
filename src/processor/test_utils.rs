@@ -18,7 +18,7 @@ use std::fmt::{self, Debug};
 use std::sync::atomic::{AtomicUsize, Ordering};
 use std::sync::{Arc, Mutex, RwLock};
 
-use common::prelude::*;
+use crate::common::prelude::*;
 
 pub struct Script<I: Send + Sync + Debug + Clone> {
     id: usize,

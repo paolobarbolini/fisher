@@ -23,10 +23,10 @@ use std::sync::Arc;
 
 use tempdir::TempDir;
 
-use common::prelude::*;
-use common::state::State;
-use scripts::Script;
-use web::WebRequest;
+use crate::common::prelude::*;
+use crate::common::state::State;
+use crate::scripts::Script;
+use crate::web::WebRequest;
 
 pub struct TestEnv {
     state: Arc<State>,

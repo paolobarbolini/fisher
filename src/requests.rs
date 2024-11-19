@@ -13,9 +13,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-use common::prelude::*;
-use providers::StatusEvent;
-use web::WebRequest;
+use crate::common::prelude::*;
+use crate::providers::StatusEvent;
+use crate::web::WebRequest;
 
 #[derive(Debug, PartialEq, Eq, Copy, Clone)]
 pub enum RequestType {

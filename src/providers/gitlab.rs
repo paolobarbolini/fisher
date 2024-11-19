@@ -13,10 +13,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-use serde_json;
-
-use common::prelude::*;
-use providers::prelude::*;
+use crate::common::prelude::*;
+use crate::providers::prelude::*;
 
 lazy_static! {
     static ref GITLAB_EVENTS: Vec<&'static str> = vec![
@@ -136,11 +134,11 @@ fn normalize_event_name(input: &str) -> &str {
 
 #[cfg(test)]
 mod tests {
-    use providers::ProviderTrait;
-    use requests::{Request, RequestType};
-    use scripts::EnvBuilder;
-    use utils::testing::*;
-    use web::WebRequest;
+    use crate::providers::ProviderTrait;
+    use crate::requests::{Request, RequestType};
+    use crate::scripts::EnvBuilder;
+    use crate::utils::testing::*;
+    use crate::web::WebRequest;
 
     use super::{normalize_event_name, GitLabProvider, GITLAB_EVENTS};
 

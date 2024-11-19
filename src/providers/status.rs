@@ -16,10 +16,8 @@
 use std::net::IpAddr;
 use std::slice::Iter as SliceIter;
 
-use serde_json;
-
-use providers::prelude::*;
-use scripts::JobOutput;
+use crate::providers::prelude::*;
+use crate::scripts::JobOutput;
 
 #[derive(Debug, Clone)]
 pub enum StatusEvent {
@@ -173,10 +171,10 @@ impl ProviderTrait for StatusProvider {
 
 #[cfg(test)]
 mod tests {
-    use providers::ProviderTrait;
-    use requests::RequestType;
-    use scripts::EnvBuilder;
-    use utils::testing::*;
+    use crate::providers::ProviderTrait;
+    use crate::requests::RequestType;
+    use crate::scripts::EnvBuilder;
+    use crate::utils::testing::*;
 
     use super::{StatusEvent, StatusProvider};
 

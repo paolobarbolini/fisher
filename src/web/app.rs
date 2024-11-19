@@ -19,12 +19,12 @@ use std::sync::Arc;
 
 use tiny_http::Method;
 
-use common::config::HttpConfig;
-use common::prelude::*;
+use crate::common::config::HttpConfig;
+use crate::common::prelude::*;
 
-use scripts::Repository;
-use web::api::WebApi;
-use web::http::HttpServer;
+use crate::scripts::Repository;
+use crate::web::api::WebApi;
+use crate::web::http::HttpServer;
 
 pub struct WebApp<A: ProcessorApiTrait<Repository> + 'static> {
     server: HttpServer<WebApi<A>>,
@@ -98,9 +98,9 @@ mod tests {
     use hyper::status::StatusCode;
     use serde_json;
 
-    use common::prelude::*;
+    use crate::common::prelude::*;
 
-    use utils::testing::*;
+    use crate::utils::testing::*;
 
     #[test]
     fn test_startup() {
