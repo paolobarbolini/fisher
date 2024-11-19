@@ -208,9 +208,9 @@ fn verify_signature(secret: &str, payload: &str, raw_signature: &str) -> bool {
     }
 
     // Verify the HMAC signature
-    let mut mac = HmacSha1::new_varkey(secret.as_bytes()).unwrap();
-    mac.input(payload.as_bytes());
-    mac.verify(&signature).is_ok()
+    let mut mac = HmacSha1::new_from_slice(secret.as_bytes()).unwrap();
+    mac.update(payload.as_bytes());
+    mac.verify_slice(&signature).is_ok()
 }
 
 #[cfg(test)]

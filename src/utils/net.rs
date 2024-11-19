@@ -18,14 +18,12 @@ use std::net::IpAddr;
 
 use common::prelude::*;
 
-
 pub type Headers = HashMap<String, String>;
-
 
 pub fn parse_forwarded_for(headers: &Headers) -> Result<Vec<IpAddr>> {
     let mut result = vec![];
 
-    if let Some(header) = headers.get("X-Forwarded-For".into()) {
+    if let Some(header) = headers.get("X-Forwarded-For") {
         // Parse the header content
         let splitted: Vec<&str> = header.split(',').collect();
 

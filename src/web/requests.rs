@@ -27,11 +27,10 @@ pub struct WebRequest {
     pub body: String,
 }
 
-
 impl<'a> From<&'a mut tiny_http::Request> for WebRequest {
     fn from(origin: &'a mut tiny_http::Request) -> WebRequest {
         // Get the source IP
-        let source = origin.remote_addr().ip();
+        let source = origin.remote_addr().expect("not a TCP listener").ip();
 
         // Get the headers
         let mut headers = HashMap::new();

@@ -162,7 +162,8 @@ impl<App: Send + Sync + 'static> HttpServer<App> {
         let server = tiny_http::Server::http(bind)?;
 
         // Store the server address into the struct
-        self.listening_to = Some(server.server_addr());
+        self.listening_to =
+            Some(server.server_addr().to_ip().expect("not a TCP listener"));
 
         let (stop_send, stop_recv) = mpsc::channel();
         self.stop_wait = Some(stop_recv);
